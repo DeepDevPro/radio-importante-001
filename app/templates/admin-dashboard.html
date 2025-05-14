@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Rádio Importante - Painel do Administrador</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="body-admin-dash" data-bg="{{ imagem_fundo }}">
+
+	<div class="box-admin-dash">
+
+		<h1 class="admin-dash-title">Painel do Administrador</h1>
+	
+		<div class="admin-dash-tabs">
+			<button class="tab active" data-aba="musicas">Músicas</button>
+			<button class="tab" data-aba="imagens">Imagens</button>
+		</div>
+	
+		<main class="admin-dash-container">
+
+			<!-- Aba de Músicas -->
+			<div class="aba aba-musicas active">
+
+				<!-- Upload de Músicas -->
+				<section class="upload-box">
+					<h2>Upload de Músicas</h2>
+					<div class="drop-area">
+						<form id="form-upload-musicas" action="/upload-musicas" method="POST" enctype="multipart/form-data" class="upload-form">
+							<input type="file" name="musicas" id="input-musicas" multiple accept="audio/mpeg, audio/wav, audio/x-aiff">
+							
+							<button type="submit" class="upload-button">Enviar Músicas</button>
+						</form>
+
+						<div class="progress-container" style="display: none;">
+							<div class="progress-bar" id="progress-bar"></div>
+						</div>
+
+						<div class="processing-overlay" style="display: none;">
+							<div class="spinner"></div>
+							<p>🎧 Otimizando músicas, por favor aguarde...</p>
+						</div>
+						
+						<p>Clique aqui para selecionar ou arraste arquivos de áudio</p>
+						<p><small>Arquivos de áudio MP3, WAV, AIFF (máx. 300MB)</small></p>
+					</div>
+				</section>
+		
+				<!-- Lista de Músicas -->
+				<section class="list-box">
+					<h2>Músicas Disponíveis</h2>
+
+					<!-- Formulário de exclusão em massa -->
+					<form id="form-excluir-musicas" action="/excluir-musicas" method="POST">
+
+						<div class="list-actions">
+							<!-- <span>{{ total_musicas }} músicas</span> -->
+							<span id="contador-selecionadas">Nenhuma música selecionada</span>
+							<button type="submit" class="delete-selected">Excluir Selecionados</button>
+						</div>
+
+						<div class="list-summary">
+							<span>🎵 Total de músicas: {{ total_musicas }}</span>
+							<span>⏱️ Duração total: {{ duracao_total }}</span>
+						</div>
+
+						<table class="music-table">
+							<thead>
+								<tr>
+									<th><input type="checkbox" id="check-todos"/></th>
+									<th>#</th>
+									<th>Artista</th>
+									<th>Música</th>
+									<th>Versão</th>
+									<th>Duração</th>
+									<th id="c4">Ações</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for musica in musicas %}
+								<tr>
+									<td><input type="checkbox" name="ids" value="{{ musica.id }}" class="check-musica"/></td>
+									<td>{{ loop.index }}</td>
+									<td>{{ musica.artista.replace("_", " ") }}</td>
+									<td>{{ musica.titulo.replace("_", " ") }}</td>
+									<!-- <td>{{ musica.versao or "-" }}</td> -->
+									<td>{{ musica.versao.replace("_", " ") if musica.versao else "-" }}</td>
+									<td>
+										{% set dur = musica.duracao_segundos %}
+										{{ "%02d:%02d:%02d" | format(dur // 3600, (dur % 3600) // 60, dur % 60) }}
+									</td>
+									<td id="c4">
+										<form action="/excluir-musicas" method="POST" onsubmit="return confirm('Deseja excluir esta músca?')">
+											<input type="hidden" name="ids" value="{{ musica.id }}">
+											<button class="delete-btn" type="submit">Excluir</button>
+										</form>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</form> 
+				</section>
+			</div>
+
+			<!--  ✅ Aba de Imagens (a ser preenchida na aula 4)  -->
+			<div class="aba aba-imagens">
+				
+				<!-- Upload de Imagens -->
+				<section class="upload-box">
+					<h2>Upload de Imagens</h2>
+					
+					<div class="drop-area">
+						<form id="form-upload-imagem" action="/upload-imagens" method="POST" enctype="multipart/form-data" class="upload-form">
+							<h2>Upload de Imagens</h2>
+
+							<input type="file" name="imagens" id="input-imagem" multiple accept="image/png, image/jpeg">
+
+							<button type="submit" class="upload-button">Enviar Imagens</button>
+						</form>
+
+						<p>Clique aqui para selecionar ou arraste arquivos de imagem</p>
+
+						<p><small>Imagens JPG, PNG (máx. 25mb)</small></p>
+					</div>
+
+					<button class="upload-button">Enviar Imagens</button>
+				</section>
+
+				<!-- Galeria de Imagens -->
+				<section class="gallery-box">
+					<h2>Galeria de Imagens</h2>
+					<div class="image-gallery">
+						{% for imagem in galeria_imagens %}
+						{% set imagem_original = imagem | replace('thumb_', '') %}
+						<div class="image-card {% if imagem_original == imagem_fundo %}active{% endif %}">
+							<img src="{{ url_for('static', filename='img/galeria/' ~ imagem) }}" alt="Imagem galeria">
+						
+						<form action="/definir-fundo" method="POST">
+							<input type="hidden" name="imagem" value="{{ imagem_original }}">
+							<button class="set-bg-btn" type="submit">Usar como fundo</button>
+						</form>
+						</div>
+						{% endfor %}
+					</div>
+				</section>
+			</div>
+	
+		</main>
+	</div>
+
+	<script src="{{ url_for('static', filename='js/admin-dashboard.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/set-background.js') }}"></script>
+	
+</body>
+</html>

@@ -1,0 +1,48 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	list-style: none;
+	text-decoration: none;
+}
+
+body, html {
+	height: 100%;
+	width: 100%;
+	font-family: Arial, sans-serif;
+}
+
+body {
+	background: url('../img/background.jpg') no-repeat center center fixed;
+	background-size: cover;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	height: 100%;
+	padding: 2rem;
+}
+
+.logo {
+	max-width: 500px;
+	margin-top: 8rem;
+}
+
+.controls {
+	display: flex;
+	justify-content: center;
+	gap: 40px;
+	margin-bottom: 6rem;
+}
+
+.controls img {
+	width: 60px;
+	height: 60px;
+	cursor: pointer;
+}

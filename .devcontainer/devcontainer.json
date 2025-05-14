@@ -1,0 +1,17 @@
+{
+	"name": "Flask + PostgreSQL Dev",
+	"dockerFile": "Dockerfile",
+	"forwardPorts": [5000],
+	"postCreateCommand": "pip install -r requirements.txt",
+	"settings": {
+	  "terminal.integrated.defaultProfile.linux": "bash"
+	},
+	"extensions": [
+	  "ms-python.python",
+	  "ms-azuretools.vscode-docker"
+	],
+	"remoteEnv": {
+	  "FLASK_ENV": "development"
+	}
+  }
+  

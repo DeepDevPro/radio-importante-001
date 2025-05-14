@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>Rádio Importante</title>
+		<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+	</head>
+
+	<body class="body-home-radio" data-bg="{{ imagem_fundo }}">
+		<!-- CODIGO ANTIGO DO TEMPLATE -->
+		<!-- <h1>Olá, {{ nome }}! 🚀</h1> -->
+		<!-- <p>Este é o primeiro template HTML servido pelo Flask usando Jinja2.</p> -->
+
+		<audio id="player" preload="auto"></audio>
+		
+		<div class="container">
+			<img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo">
+
+			<div class="controls">
+				<img id="play-btn" src="{{ url_for('static', filename='icons/play.svg') }}" alt="Play">
+				<img id="next-btn" src="{{ url_for('static', filename='icons/next-track.svg') }}" alt="Next">
+				<img id="info-btn" src="{{ url_for('static', filename='icons/info.svg') }}" alt="Info">
+			</div>
+		</div>
+
+		<script src="{{ url_for('static', filename='js/set-background.js') }}"></script>
+
+		<!-- <script>
+			window.playlist = [
+				{% for m in musicas %}
+					"{{ url_for('static', filename='musicas/otimizadas/' ~ m.nome_arquivo) }}"{% if not loop.last %},{% endif %}
+				{% endfor %}
+			];
+			console.log("🎶 Playlist gerada:", playlist);
+		</script> -->
+
+		<script src="{{ url_for('static', filename='js/home-player.js') }}"></script>
+
+		<div class="info-modal" id="info-modal" style="display: none;">
+			<div class="info-content">
+				<h2 id="info-titulo">Título da Música</h2>
+				<p id="info-arquivo">Arquivo: nome.mp3</p>
+				<button id="fechar-info">Fechar</button>
+			</div>
+		</div>
+
+		<!-- <script>
+			window.playlist = {{ fila | tojson }};
+			console.log("📀 Fila da sessão:", playlist);
+		</script> -->
+
+		<!-- <script>
+			const playlist = [
+			{% for m in session.get("fila", []) %}
+				"/static/musicas/otimizadas/{{ m }}"{% if not loop.last %},{% endif %}
+			{% endfor %}
+			];
+			console.log("🎶 Playlist gerada:", playlist);
+		</script> -->
+
+		<script>
+			window.playlist = [
+			{% for m in session.get("fila", []) %}
+				"/static/musicas/otimizadas/{{ m }}"{% if not loop.last %},{% endif %}
+			{% endfor %}
+			];
+			console.log("🎶 Playlist gerada:", window.playlist);
+		</script>
+
+	</body>
+</html>
