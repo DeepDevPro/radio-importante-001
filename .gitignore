@@ -1,17 +1,22 @@
+# Python
 __pycache__/
 *.pyc
-.env
 .venv/
+.env
+
+# IDEs
 .vscode/
+
+# macOS
 .DS_Store
 
-# Uploads e mídias do admin (devem ficar fora do Git)
+# Uploads e mídias (dev apenas)
 app/static/musicas/originais/
 app/static/musicas/otimizadas/
 app/static/img/galeria/
 
-# Backup SQL (dump manual)
+# Dumps e backups
 *.sql
 
-# Elastic Beanstalk artefatos
+# AWS Elastic Beanstalk
 .elasticbeanstalk/
