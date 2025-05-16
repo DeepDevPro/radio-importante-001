@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from pydub import AudioSegment
 from app.models import User, db, Track
-from datetime import timedelta
+from datetime import timedelta 
 
 
 #   <<  SOBRE O BANCO DE DADOS  >>
@@ -30,6 +30,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)    # (2) Agora vai vincular ao app
 
+
+@app.route("/health")
+def health():
+    return "OK", 200
 
 #   <<  SOBRE AS ROTAS  >>
 @app.route("/")
