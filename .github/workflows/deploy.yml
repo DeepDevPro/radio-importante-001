@@ -1,0 +1,46 @@
+name: Deploy para AWS Elastic Beanstalk
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Instalar AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zip unzip python3-pip
+          pip3 install awscli --upgrade --user
+      
+      - name: Criar pacote ZIP
+        run: |
+          zip -r app.zip . -x '*.git*'
+      
+      - name: Fazer deploy com AWS CLI
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-west-2
+        run: |
+          aws elasticbeanstalk create-application-version \
+            --application-name radio-importante \
+            --version-label v-${{ github.run_number }} \
+            --source-bunde S3Bucket=elasticbeanstalk-us-west2-${{ secrets.AWS_ACCOUNT_ID }},
+            S3Key=appv${{ github.run_number }}.zip \
+            --region $AWS_REGION
+          
+          aws s3 cp app.zip s3://elasticbeanstalk-us-west-2-${{ secrets.AWS_ACCOUNT_ID }}/app-s${{ github.run_number }}.zip
+
+          aws elasticbeanstalk update-environment \
+            --environment-name radio-importante-env \
+            --version-label v-${{ github.run_number }} \
+            --region $AWS_REGION
+
+
+

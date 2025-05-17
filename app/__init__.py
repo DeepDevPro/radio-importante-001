@@ -381,3 +381,4 @@ def excluir_musicas():
     db.session.commit()
     return redirect(url_for("admin_dashboard", aba="musicas"))
 
+
