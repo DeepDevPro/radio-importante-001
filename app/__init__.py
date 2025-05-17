@@ -81,7 +81,9 @@ def contexto_geral():
     
     # Gera a lista de imagens da galeria (miniatura)
     galeria = []
-    pasta = os.path.join("app", "static", "img", "galeria")
+    # pasta = os.path.join("app", "static", "img", "galeria")
+    pasta = os.path.join(app.root_path, "static", "img", "galeria")
+
     extensoes_validas = [".jpg", ".jpeg", ".png"]
 
     for nome in os.listdir(pasta):
