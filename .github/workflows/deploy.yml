@@ -28,13 +28,13 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-west-2
         run: |
+          aws s3 cp app.zip s3://elasticbeanstalk-us-west-2-${{ secrets.AWS_ACCOUNT_ID }}/app-v${{ github.run_number }}.zip
+
           aws elasticbeanstalk create-application-version \
             --application-name radio-importante \
             --version-label v-${{ github.run_number }} \
-            --source-bundle "S3Bucket=elasticbeanstalk-us-west-2${{ secrets.AWS_ACCOUNT_ID }}, S3Key=app-v${{ github.run_nuber }}.zip" \
+            --source-bundle "S3Bucket=elasticbeanstalk-us-west-2-${{ secrets.AWS_ACCOUNT_ID }},S3Key=app-v${{ github.run_number }}.zip" \
             --region $AWS_REGION
-          
-          aws s3 cp app.zip s3://elasticbeanstalk-us-west-2-${{ secrets.AWS_ACCOUNT_ID }}/app-s${{ github.run_number }}.zip
 
           aws elasticbeanstalk update-environment \
             --environment-name radio-importante-env \
