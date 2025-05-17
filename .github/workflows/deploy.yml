@@ -31,7 +31,7 @@ jobs:
           aws elasticbeanstalk create-application-version \
             --application-name radio-importante \
             --version-label v-${{ github.run_number }} \
-            --source-bunde S3Bucket=elasticbeanstalk-us-west2-${{ secrets.AWS_ACCOUNT_ID }},
+            --source-bundle S3Bucket=elasticbeanstalk-us-west2-${{ secrets.AWS_ACCOUNT_ID }},
             S3Key=appv${{ github.run_number }}.zip \
             --region $AWS_REGION
           
