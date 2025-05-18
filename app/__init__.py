@@ -261,6 +261,9 @@ def upload_imagens():
             nome_seguro = secure_filename(arquivo.filename)
             caminho = os.path.join(app.config["UPLOAD_FOLDER"], nome_seguro)
 
+            # ✅ Garante que a pasta exista antes de salvar
+            os.makedirs(os.path.dirname(caminho), exist_ok=True)
+
             imagem = Image.open(arquivo)
             imagem = imagem.convert("RGB")
 
