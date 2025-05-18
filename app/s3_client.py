@@ -9,14 +9,14 @@ PASTA_IMAGENS = "static/img/galeria"
 PASTA_MUSICAS = "static/musicas/otimizadas"
 
 # Cria o cliente S3 (sem chave explícita pois usaremos IAM Role)
-s3 = boto3.cleint("s3")
+s3 = boto3.client("s3")
 
 def listar_buckets():
 	"""Função de teste opcional"""
 	resposta = s3.list_buckets()
 	return [b["Name"] for b in resposta["Buckets"]]
 
-def uploar_para_s3(arquivo, caminho_destino):
+def upload_para_s3(arquivo, caminho_destino):
 	""""
 	Salva o arquivo recebido (objeto FileStorage) no S3.
 
