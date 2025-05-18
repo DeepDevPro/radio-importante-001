@@ -7,7 +7,8 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from pydub import AudioSegment
 from app.models import User, db, Track
-from datetime import timedelta 
+from datetime import timedelta
+from app.s3_client import listar_buckets
 
 
 #   <<  SOBRE O BANCO DE DADOS  >>
