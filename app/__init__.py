@@ -122,6 +122,14 @@ def admin_dashboard():
                            total_musicas=len(musicas),
                            duracao_total=total_formatado)
 
+# Testando o funcionamento do S3
+@app.route("/testar-s3")
+def testar_s3():
+    try:
+        buckets = lista_buckets()
+        return jsonify({"buckets": buckets})
+    except Exception as e:
+        return jsonify({"erro": str(e)})
 
 # Criando a rota para inserir um usuário
 @app.route("/api/usuarios", methods=["POST"])
@@ -384,4 +392,4 @@ def excluir_musicas():
     db.session.commit()
     return redirect(url_for("admin_dashboard", aba="musicas"))
 
-# Apenas um comment pra forçar o commit no Git
+
