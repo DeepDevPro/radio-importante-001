@@ -1,8 +1,10 @@
 import boto3
 import os
+from botocore.exceptions import NoCredentialsError
+import uuid
 
 # Nome do bucket (coloque o nome EXATO criado no console da AWS)
-BUCKET_NAME = os.getenv("S3_BUCKET_NAME", "elasticbeanstalk-us-west-2-692687498801")
+BUCKET_NAME = "radioimportante-uploads"
 
 # Caminho base das imagens e músicas no bucket
 PASTA_IMAGENS = "static/img/galeria"
@@ -16,19 +18,32 @@ def listar_buckets():
 	resposta = s3.list_buckets()
 	return [b["Name"] for b in resposta["Buckets"]]
 
-def upload_para_s3(arquivo, caminho_destino):
-	""""
-	Salva o arquivo recebido (objeto FileStorage) no S3.
+# def upload_para_s3(arquivo, caminho_destino):
+# 	""""
+# 	Salva o arquivo recebido (objeto FileStorage) no S3.
 
-	Exemplo de uso:
-		upload_para_s3(arquivo, "uploads/imagens/logo.png")
-	"""
+# 	Exemplo de uso:
+# 		upload_para_s3(arquivo, "uploads/imagens/logo.png")
+# 	"""
+# 	s3.upload_fileobj(
+# 		Fileobj=arquivo,
+# 		Bucket=BUCKET_NAME,
+# 		Key=caminho_destino,
+# 		ExtraArgs={"ACL": "public-read", "ContentType": arquivo.content_type}
+# 	)
+
+def upload_para_s3(arquivo, nome_arquivo, pasta="imagens"):
+	chave = f"{pasta}/{uuid.uuid4().hex}_{nome_arquivo}"
+
 	s3.upload_fileobj(
-		Fileobj=arquivo,
-		Bucket=BUCKET_NAME,
-		Key=caminho_destino,
+		arquivo,
+		BUCKET_NAME,
+		chave,
 		ExtraArgs={"ACL": "public-read", "ContentType": arquivo.content_type}
 	)
+
+	url = f"https://{BUCKET_NAME}.s3.amazonaws.com/{chave}"
+	return url
 
 def gerar_url_publica(nome_arquivo, pasta="imagens"):
 	""""

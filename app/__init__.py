@@ -80,9 +80,9 @@ def contexto_geral():
             config = json.load(f)
             imagem_fundo = config.get("background_image", imagem_fundo)
     
-    # Caminho absoluto CORRETO
-    base_dir = os.path.dirname(__file__)
-    pasta = os.path.join(base_dir, "static", "img", "galeria")
+    # # Caminho absoluto CORRETO
+    # base_dir = os.path.dirname(__file__)
+    # pasta = os.path.join(base_dir, "static", "img", "galeria")
 
     # Gera a lista de imagens da galeria (miniatura)
     galeria = []
@@ -90,15 +90,6 @@ def contexto_geral():
     # pasta = os.path.join(app.root_path, "static", "img", "galeria")
 
     extensoes_validas = [".jpg", ".jpeg", ".png"]
-
-    if os.path.exists(pasta):
-        for nome in os.listdir(pasta):
-            # Ignora os arquivos que não sejam imagens ou que não sejam miniaturas
-            if (
-                nome.startswith("thumb_")
-                and os.path.splitext(nome)[1].lower() in extensoes_validas
-            ):
-                galeria.append(nome)
 
     return {
         "imagem_fundo": imagem_fundo,
