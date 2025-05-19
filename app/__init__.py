@@ -279,7 +279,10 @@ def upload_imagens():
             # salvos.append(os.path.basename(caminho))
 
             # Envia imagem otimizada
-            upload_arquivo_s3(buffer, nome_seguro, pasta="static/img/galeria")
+            upload_arquivo_s3(buffer, nome_seguro, pasta="static/img/galeria", content_type="image/jpeg")
+            upload_arquivo_s3(buffer_thumb, nome_thumb, pasta="static/img/galeria", content_type="image/jpeg")
+
+
 
             # Miniaturas
             thumb = imagem.copy()

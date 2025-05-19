@@ -18,32 +18,24 @@ def listar_buckets():
 	resposta = s3.list_buckets()
 	return [b["Name"] for b in resposta["Buckets"]]
 
-# def upload_para_s3(arquivo, caminho_destino):
-# 	""""
-# 	Salva o arquivo recebido (objeto FileStorage) no S3.
+def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens", content_type="image/jpeg"):
+	s3 = boto3.client("s3")
 
-# 	Exemplo de uso:
-# 		upload_para_s3(arquivo, "uploads/imagens/logo.png")
-# 	"""
-# 	s3.upload_fileobj(
-# 		Fileobj=arquivo,
-# 		Bucket=BUCKET_NAME,
-# 		Key=caminho_destino,
-# 		ExtraArgs={"ACL": "public-read", "ContentType": arquivo.content_type}
-# 	)
+	try:	
+		chave = f"{pasta}/{uuid.uuid4().hex}_{nome_arquivo}"
 
-def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens"):
-	chave = f"{pasta}/{uuid.uuid4().hex}_{nome_arquivo}"
+		s3.upload_fileobj(
+			arquivo,
+			BUCKET_NAME,
+			chave,
+			ExtraArgs={"ACL": "public-read", "ContentType": content_type}
+		)
 
-	s3.upload_fileobj(
-		arquivo,
-		BUCKET_NAME,
-		chave,
-		ExtraArgs={"ACL": "public-read", "ContentType": arquivo.content_type}
-	)
-
-	url = f"https://{BUCKET_NAME}.s3.amazonaws.com/{chave}"
-	return url
+		url = f"https://{BUCKET_NAME}.s3.amazonaws.com/{chave}"
+		return url
+	
+	except NoCredentialsError:
+		raise RuntimeError("Credenciais AWS não configuradas corretamente.")
 
 def gerar_url_publica(nome_arquivo, pasta="imagens"):
 	""""
