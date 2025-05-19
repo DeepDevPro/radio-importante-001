@@ -32,7 +32,7 @@ def listar_buckets():
 # 		ExtraArgs={"ACL": "public-read", "ContentType": arquivo.content_type}
 # 	)
 
-def upload_para_s3(arquivo, nome_arquivo, pasta="imagens"):
+def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens"):
 	chave = f"{pasta}/{uuid.uuid4().hex}_{nome_arquivo}"
 
 	s3.upload_fileobj(
