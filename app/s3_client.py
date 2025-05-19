@@ -18,7 +18,8 @@ def listar_buckets():
 	resposta = s3.list_buckets()
 	return [b["Name"] for b in resposta["Buckets"]]
 
-def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens", content_type="image/jpeg"):
+# def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens", content_type="image/jpeg"):
+def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens"):
 	s3 = boto3.client("s3")
 
 	try:	
@@ -28,7 +29,7 @@ def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens", content_type="imag
 			arquivo,
 			BUCKET_NAME,
 			chave,
-			ExtraArgs={"ACL": "public-read", "ContentType": content_type}
+			ExtraArgs={"ACL": "public-read", "ContentType": arquivo.content_type}
 		)
 
 		url = f"https://{BUCKET_NAME}.s3.amazonaws.com/{chave}"
