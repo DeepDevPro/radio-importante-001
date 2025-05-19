@@ -271,7 +271,7 @@ def upload_imagens():
             # Redimensiona imagem original para no máx. 1600x1600
             imagem.thumbnail((1600, 1600))
 
-            buffer = BytesID()
+            buffer = BytesIO()
             # caminho = os.path.splitext(caminho) [0] + ".jpg"
             # imagem.save(caminho, format="JPEG", quality=65, optimize=True)
             imagem.save(buffer, format="JPEG", quality=65, optimize=True)
