@@ -8,7 +8,7 @@ from PIL import Image
 from pydub import AudioSegment
 from app.models import User, db, Track
 from datetime import timedelta
-from app.s3_client import listar_buckets, upload_arquivo_s3
+from app.s3_client import upload_arquivo_s3
 from io import BytesIO
 
 
