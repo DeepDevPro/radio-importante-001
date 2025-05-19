@@ -8,7 +8,8 @@ from PIL import Image
 from pydub import AudioSegment
 from app.models import User, db, Track
 from datetime import timedelta
-from app.s3_client import listar_buckets
+from app.s3_client import listar_buckets, upload_para_s3, upload_arquivo_s3
+from io import BytesIO
 
 
 #   <<  SOBRE O BANCO DE DADOS  >>
@@ -238,11 +239,11 @@ def dashboard():
 
 # Diretório de upload de imagens (garanta que exista)
 UPLOAD_FOLDER = os.path.join("app", "static", "img", "galeria")
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
-MAX_WIDTH = 1600
-THUMB_SIZE = (200, 200) # Para a galeria
-
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+# MAX_WIDTH = 1600
+# THUMB_SIZE = (200, 200) # Para a galeria
+
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
 def extensao_permitida(nome_arquivo):
     return "." in nome_arquivo and \
@@ -259,26 +260,38 @@ def upload_imagens():
     for arquivo in arquivos:
         if arquivo and extensao_permitida(arquivo.filename):
             nome_seguro = secure_filename(arquivo.filename)
-            caminho = os.path.join(app.config["UPLOAD_FOLDER"], nome_seguro)
+            # caminho = os.path.join(app.config["UPLOAD_FOLDER"], nome_seguro)
 
             # ✅ Garante que a pasta exista antes de salvar
-            os.makedirs(os.path.dirname(caminho), exist_ok=True)
+            # os.makedirs(os.path.dirname(caminho), exist_ok=True)
 
             imagem = Image.open(arquivo)
             imagem = imagem.convert("RGB")
 
             # Redimensiona imagem original para no máx. 1600x1600
             imagem.thumbnail((1600, 1600))
-            caminho = os.path.splitext(caminho) [0] + ".jpg"
-            imagem.save(caminho, format="JPEG", quality=65, optimize=True)
-            salvos.append(os.path.basename(caminho))
 
-            # Criar miniatura no mesmo diretório, com prefixo thumb_
-            miniatura = imagem.copy()
-            miniatura.thumbnail((300, 300))
-            nome_thumb = "thumb_" + os.path.basename(caminho)
-            caminho_thumb = os.path.join(app.config["UPLOAD_FOLDER"], nome_thumb)
-            miniatura.save(caminho_thumb, format="JPEG", quality=50, optimize=True)
+            buffer = BytesID()
+            # caminho = os.path.splitext(caminho) [0] + ".jpg"
+            # imagem.save(caminho, format="JPEG", quality=65, optimize=True)
+            imagem.save(buffer, format="JPEG", quality=65, optimize=True)
+            buffer.seek(0)
+            # salvos.append(os.path.basename(caminho))
+
+            # Envia imagem otimizada
+            upload_arquivo_s3(buffer, nome_seguro, pasta="static/img/galeria")
+
+            # Miniaturas
+            thumb = imagem.copy()
+            thumb.thumbnail((300, 300))
+            buffer_thumb = BytesIO()
+            thumb.save(buffer_thumb, format="JPEG", quality=50, optimize=True)
+            buffer_thumb.seek(0)
+
+            nome_thumb = f"thumb_{nome_seguro}"
+            upload_arquivo_s3(buffer_thumb, nome_thumb, pasta="static/img/galeria")
+
+            salvos.append(nome_thumb)
     
     if salvos:
         return redirect(url_for("admin_dashboard", aba="imagens"))
@@ -311,52 +324,40 @@ def definir_fundo():
 def upload_musicas():
     arquivos = request.files.getlist("musicas")
 
-    pasta_original = os.path.join("app", "static", "musicas", "originais")
-    pasta_final = os.path.join("app", "static", "musicas", "otimizadas")
-    os.makedirs(pasta_original, exist_ok=True)
-    os.makedirs(pasta_final, exist_ok=True)
-
-    # pasta_upload = os.path.join("app", "static", "musicas", "originais")
-    # os.makedirs(pasta_upload, exist_ok=True)
-
-    # extensoes_validas = [".mp3", ".wav", ".aiff"]
     for arquivo in arquivos:
         nome_seguro = secure_filename(arquivo.filename)
-        # ext = os.pathsplitext(nome)[1].lower()
-        caminho_original = os.path.join(pasta_original, nome_seguro)
-        arquivo.save(caminho_original)
-
-        # Parse nome do arquivo
-        nome_base = os.path.splitext(nome_seguro)[0]
+        nome_base = os.path.splitext(nome_seguro) [0]
         partes = nome_base.split("-")
 
         artista = partes[0].strip() if len(partes) > 0 else "Desconhecido"
-        titulo_versao = partes[1].strip() if len(partes) > 1 else "Sem Titulo"
+        titulo_versao = partes[1].strip() if len(partes) > 1 else "Sem Título"
 
         if "(" in titulo_versao:
             titulo, versao = titulo_versao.split("(", 1)
-            titulo = titulo.strip()
+            titulo - titulo.strip()
             versao = versao.strip(") ")
         else:
             titulo = titulo_versao
             versao = None
         
-        # Otimiza e salva como MP3
-        audio = AudioSegment.from_file(caminho_original)
+        audio = AudioSegment.from_file(arquivo)
         audio = audio.set_channels(2).set_frame_rate(44100)
-        caminho_mp3 = os.path.join(pasta_final, f"{nome_base}.mp3")
-        audio.export(caminho_mp3, format="mp3", bitrate="128k")
 
-        # Duração em segundos
+        buffer = BytesIO()
+        audio.export(buffer, format="mp3", bitrate="128k")
+        buffer.seek(0)
+
+        nome_final = f"{nome_base}.mp3"
+        upload_arquivo_s3(buffer, nome_final, pasta="static/musicas/otimizadas")
+
         duracao = len(audio) // 1000
 
-        # Salva no banco
         nova_musica = Track(
             artista=artista,
             titulo=titulo,
             versao=versao,
             duracao_segundos=duracao,
-            nome_arquivo=f"{nome_base}.mp3"
+            nome_arquivo=nome_final
         )
         db.session.add(nova_musica)
     
