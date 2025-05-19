@@ -258,6 +258,8 @@ def upload_imagens():
     salvos = []
 
     for arquivo in arquivos:
+        print(f"[UPLOAD] Enviando imagem: {nome_seguro}")
+        
         if arquivo and extensao_permitida(arquivo.filename):
             nome_seguro = secure_filename(arquivo.filename)
             # caminho = os.path.join(app.config["UPLOAD_FOLDER"], nome_seguro)
@@ -280,9 +282,6 @@ def upload_imagens():
 
             # Envia imagem otimizada
             upload_arquivo_s3(buffer, nome_seguro, pasta="static/img/galeria", content_type="image/jpeg")
-            upload_arquivo_s3(buffer_thumb, nome_thumb, pasta="static/img/galeria", content_type="image/jpeg")
-
-
 
             # Miniaturas
             thumb = imagem.copy()
@@ -292,7 +291,7 @@ def upload_imagens():
             buffer_thumb.seek(0)
 
             nome_thumb = f"thumb_{nome_seguro}"
-            upload_arquivo_s3(buffer_thumb, nome_thumb, pasta="static/img/galeria")
+            upload_arquivo_s3(buffer_thumb, nome_thumb, pasta="static/img/galeria", content_type="image/jpeg")
 
             salvos.append(nome_thumb)
     

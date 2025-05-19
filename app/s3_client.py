@@ -19,11 +19,13 @@ def listar_buckets():
 	return [b["Name"] for b in resposta["Buckets"]]
 
 # def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens", content_type="image/jpeg"):
-def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens"):
+def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens", content_type=None):
 	s3 = boto3.client("s3")
 
 	try:	
 		chave = f"{pasta}/{uuid.uuid4().hex}_{nome_arquivo}"
+
+		print(f"[S3] Enviando para: {BUCKET_NAME}/{chave} - ContentType: {content_type}")
 
 		s3.upload_fileobj(
 			arquivo,
