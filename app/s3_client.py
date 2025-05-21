@@ -24,7 +24,8 @@ def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens", content_type="appl
             arquivo,
             BUCKET_NAME,
             chave,
-            ExtraArgs={"ACL": "public-read", "ContentType": content_type}
+            ExtraArgs={"ContentType": content_type}
+
         )
 
         url = f"https://{BUCKET_NAME}.s3.amazonaws.com/{chave}"
