@@ -10,7 +10,7 @@ from app.models import User, db, Track
 from datetime import timedelta
 from app.s3_client import upload_arquivo_s3
 from io import BytesIO
-import logging
+import logging, boto3
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -76,24 +76,26 @@ def api_status():
 @app.context_processor
 def contexto_geral():
     # Carrega imagem de fundo do config.json
-    config_path = "config.json"
     imagem_fundo = "background.jpg"
+    config_path = "config.json"
 
     if os.path.exists(config_path):
         with open(config_path, "r") as f:
             config = json.load(f)
             imagem_fundo = config.get("background_image", imagem_fundo)
     
-    # # Caminho absoluto CORRETO
-    # base_dir = os.path.dirname(__file__)
-    # pasta = os.path.join(base_dir, "static", "img", "galeria")
-
+    # 🔁 NOVO: lista os arquivos no S3
+    s3 = boto3.client("s3")
+    objetos = s3.list_objects_v2(Bucket="radioimportante-uploads", Prefix="static/img/galeria")
+    
     # Gera a lista de imagens da galeria (miniatura)
     galeria = []
-    # pasta = os.path.join("app", "static", "img", "galeria")
-    # pasta = os.path.join(app.root_path, "static", "img", "galeria")
+    for obj in objetos.get("Contents", []):
+        nome_arquivo = obj["Key"].split("/")[-1]
+        if nome_arquivo.startswith("thumb_") and nome_arquivo.lower().endswith((".jpg", ".jpeg", ".png")):
+            galeria.append(nome_arquivo)
 
-    extensoes_validas = [".jpg", ".jpeg", ".png"]
+    # extensoes_validas = [".jpg", ".jpeg", ".png"]
 
     return {
         "imagem_fundo": imagem_fundo,
