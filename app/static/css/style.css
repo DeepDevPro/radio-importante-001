@@ -18,7 +18,7 @@ body, html {
 }
 
 .body-home-radio {
-	background: url("/app/static/img/background.jpg") no-repeat center center fixed;
+	background: url("/static/img/background.jpg") no-repeat center center fixed;
 	background-size: cover;
 	display: flex;
 	flex-direction: column;
