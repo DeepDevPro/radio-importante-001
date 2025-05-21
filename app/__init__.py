@@ -80,22 +80,35 @@ def contexto_geral():
     config_path = "config.json"
 
     if os.path.exists(config_path):
-        with open(config_path, "r") as f:
-            config = json.load(f)
-            imagem_fundo = config.get("background_image", imagem_fundo)
+        try:
+            with open(config_path, "r") as f:
+                config = json.load(f)
+                imagem_fundo = config.get("background_image", imagem_fundo)
+        except Exception as e:
+            app.route(f"[ERRO] Falha ao ler config.json {e}")
     
-    # 🔁 NOVO: lista os arquivos no S3
-    s3 = boto3.client("s3")
-    objetos = s3.list_objects_v2(Bucket="radioimportante-uploads", Prefix="static/img/galeria")
-    
-    # Gera a lista de imagens da galeria (miniatura)
+    # 🔹 Conecta ao S3 e lista miniaturas
     galeria = []
-    for obj in objetos.get("Contents", []):
-        nome_arquivo = obj["Key"].split("/")[-1]
-        if nome_arquivo.startswith("thumb_") and nome_arquivo.lower().endswith((".jpg", ".jpeg", ".png")):
-            galeria.append(nome_arquivo)
+    bucket_name = "radioimportante-uploads"
+    prefix = "static/img/galeria"
 
-    # extensoes_validas = [".jpg", ".jpeg", ".png"]
+    try:
+        # 🔁 NOVO: lista os arquivos no S3
+        s3 = boto3.client("s3")
+        response = s3.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+
+        # Gera a lista de imagens da galeria (miniatura)
+        for obj in response.get("Contents", []):
+            key = obj["Key"]
+            nome_arquivo = key.split("/")[-1]  # Define antes de usar
+
+            if nome_arquivo.startswith("thumb_") and nome_arquivo.lower().endswith((".jpg", ".jpeg", ".png")):
+                galeria.append({
+                    "nome": nome_arquivo,
+                    "url": f"https://{bucket_name}.s3.amazonanw.com/{key}"
+                })
+    except Exception as e:
+        app.route(f"[ERRO] Falha ao acessar o S3: {e}")
 
     return {
         "imagem_fundo": imagem_fundo,
