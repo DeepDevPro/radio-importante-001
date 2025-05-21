@@ -77,15 +77,19 @@ def api_status():
 def contexto_geral():
     # Carrega imagem de fundo do config.json
     imagem_fundo = "background.jpg"
-    config_path = "config.json"
+    # config_path = "config.json"
 
-    if os.path.exists(config_path):
+    # caminho absoluto e seguro
+    caminho_config = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "config.json"))
+
+    if os.path.exists(caminho_config):
         try:
-            with open(config_path, "r") as f:
+            with open(caminho_config, "r") as f:
                 config = json.load(f)
                 imagem_fundo = config.get("background_image", imagem_fundo)
         except Exception as e:
-            app.route(f"[ERRO] Falha ao ler config.json {e}")
+            # app.route(f"[ERRO] Falha ao ler config.json {e}")
+            logger.info(f"[ERRO] config.json: {e}")
     
     # 🔹 Conecta ao S3 e lista miniaturas
     galeria = []
