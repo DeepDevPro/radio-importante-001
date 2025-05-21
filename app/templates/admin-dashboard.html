@@ -133,7 +133,8 @@
 					<h2>Galeria de Imagens</h2>
 					<div class="image-gallery">
 						{% for imagem in galeria_imagens %}
-						{% set imagem_original = imagem.nome | replace('thumb_', '') %}
+						<!-- {% set imagem_original = imagem.nome | replace('thumb_', '') %} -->
+						{% set imagem_original = imagem.nome.split('_')[-1] %}
 						<div class="image-card {% if imagem_original == imagem_fundo %}active{% endif %}">
 							<!-- <img src="{{ url_for('static', filename='img/galeria/' ~ imagem) }}" alt="Imagem galeria"> -->
 							<img src="{{ imagem.url }}" data-nome="{{ imagem.nome }}">

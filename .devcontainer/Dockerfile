@@ -23,4 +23,6 @@ RUN pip install -r requirements.txt
 EXPOSE 5000
 
 # Comando para iniciar o servidor com Gunicorn
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "application:application"]
+# CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "application:application"]
+# Diminuí pra "2" pra ver se o uso de memória baixa dos 90% no painel do EB
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "application:application"]

@@ -102,7 +102,7 @@ def contexto_geral():
             key = obj["Key"]
             nome_arquivo = key.split("/")[-1]  # Define antes de usar
 
-            if nome_arquivo.startswith("thumb_") and nome_arquivo.lower().endswith((".jpg", ".jpeg", ".png")):
+            if "thumb_" in nome_arquivo and nome_arquivo.lower().endswith((".jpg", ".jpeg", ".png")):
                 galeria.append({
                     "nome": nome_arquivo,
                     "url": f"https://{bucket_name}.s3.amazonanw.com/{key}"
