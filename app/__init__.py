@@ -10,7 +10,10 @@ from app.models import User, db, Track
 from datetime import timedelta
 from app.s3_client import upload_arquivo_s3
 from io import BytesIO
+import logging
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 #   <<  SOBRE O BANCO DE DADOS  >>
 #db = SQLAlchemy()   # (1) Só cria
@@ -251,49 +254,49 @@ def extensao_permitida(nome_arquivo):
 
 @app.route("/upload-imagens", methods=["POST"])
 def upload_imagens():
-    print("[UPLOAD]  🚀 Iniciando rota /upload-imagens")
+    logger.info("[UPLOAD]  🚀 Iniciando rota /upload-imagens")
 
     if "imagens" not in request.files:
-        print("[UPLOAD][ERRO] Nenhum campo 'imagens' encontrado em request.files")
+        logger.info("[UPLOAD][ERRO] Nenhum campo 'imagens' encontrado em request.files")
         return {"erro": "Nenhum arquivo encontrado"}, 400
     
     arquivos = request.files.getlist("imagens")
-    print(f"[UPLOAD] Total de arquivos recebidos: {len(arquivos)}")
+    logger.info(f"[UPLOAD] Total de arquivos recebidos: {len(arquivos)}")
 
     salvos = []
 
     for i, arquivo in enumerate(arquivos):
-        print(f"[UPLOAD] >> Processando arquivo {i + 1}/{len(arquivos)}")
-        print(f"[UPLOAD] Nome original: {arquivo.filename}")
+        logger.info(f"[UPLOAD] >> Processando arquivo {i + 1}/{len(arquivos)}")
+        logger.info(f"[UPLOAD] Nome original: {arquivo.filename}")
         
         if not arquivo:
-            print(f"[UPLOAD][ERRO] Arquivo {i + 1} está vazio ou inválido")
+            logger.info(f"[UPLOAD][ERRO] Arquivo {i + 1} está vazio ou inválido")
             continue
 
         if not extensao_permitida(arquivo.filename):
-            print(f"[UPLOAD][ERRO] Extensão nnao permitida: {arquivo.filename}")
+            logger.info(f"[UPLOAD][ERRO] Extensão nnao permitida: {arquivo.filename}")
             continue
 
         try:
             nome_seguro = secure_filename(arquivo.filename)
-            print(f"[UPLOAD] Nome seguro gerado: {nome_seguro}")
+            logger.info(f"[UPLOAD] Nome seguro gerado: {nome_seguro}")
 
             imagem = Image.open(arquivo)
             imagem = imagem.convert("RGB")
 
             # Redimensiona imagem original para no máx. 1600x1600
             imagem.thumbnail((1600, 1600))
-            print("[UPLOAD] Imagem convertida e redimensionada com sucesso")
+            logger.info("[UPLOAD] Imagem convertida e redimensionada com sucesso")
 
             buffer = BytesIO()
             imagem.save(buffer, format="JPEG", quality=65, optimize=True)
             buffer.seek(0)
-            print(f"[UPLOAD] Buffer principal pronto: {buffer.getbuffer().nbytes} bytes")
+            logger.info(f"[UPLOAD] Buffer principal pronto: {buffer.getbuffer().nbytes} bytes")
 
             # Envia imagem otimizada
-            print("[UPLOAD] Enviando imagem otimizada para o S3...")
+            logger.info("[UPLOAD] Enviando imagem otimizada para o S3...")
             upload_arquivo_s3(buffer, nome_seguro, pasta="static/img/galeria", content_type="image/jpeg")
-            print(f"[UPLOAD] Upload da imagem principal concluída: {nome_seguro}")
+            logger.info(f"[UPLOAD] Upload da imagem principal concluída: {nome_seguro}")
 
             # Miniaturas
             thumb = imagem.copy()
@@ -301,22 +304,22 @@ def upload_imagens():
             buffer_thumb = BytesIO()
             thumb.save(buffer_thumb, format="JPEG", quality=50, optimize=True)
             buffer_thumb.seek(0)
-            print(f"[UPLOAD] Buffer da miniatura pronto: {buffer_thumb.getbuffer().nbytes} bytes")
+            logger.info(f"[UPLOAD] Buffer da miniatura pronto: {buffer_thumb.getbuffer().nbytes} bytes")
 
             nome_thumb = f"thumb_{nome_seguro}"
-            print(f"[UPLOAD] Nome da miniatura: {nome_thumb}")
+            logger.info(f"[UPLOAD] Nome da miniatura: {nome_thumb}")
 
-            print("[UPLOAD] Enviando miniatura para o S3...")
+            logger.info("[UPLOAD] Enviando miniatura para o S3...")
             upload_arquivo_s3(buffer_thumb, nome_thumb, pasta="static/img/galeria", content_type="image/jpeg")
-            print(f"[UPLOAD] Upload da miniatura concluído: {nome_thumb}")
+            logger.info(f"[UPLOAD] Upload da miniatura concluído: {nome_thumb}")
 
             salvos.append(nome_thumb)
         
         except Exception as e:
-            print(f"[UPLOAD][ERRO] Falha ao processar/enviar '{arquivo.filename}': {str(e)}")
+            logger.info(f"[UPLOAD][ERRO] Falha ao processar/enviar '{arquivo.filename}': {str(e)}")
             continue
     
-    print(f"[UPLOAD] ✅ Upload finalizado. Total de miniaturas salvas: {len(salvos)}")
+    logger.info(f"[UPLOAD] ✅ Upload finalizado. Total de miniaturas salvas: {len(salvos)}")
     
     if salvos:
         return redirect(url_for("admin_dashboard", aba="imagens"))
