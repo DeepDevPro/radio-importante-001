@@ -88,7 +88,6 @@ def contexto_geral():
                 config = json.load(f)
                 imagem_fundo = config.get("background_image", imagem_fundo)
         except Exception as e:
-            # app.route(f"[ERRO] Falha ao ler config.json {e}")
             logger.info(f"[ERRO] config.json: {e}")
     
     # 🔹 Conecta ao S3 e lista miniaturas
@@ -109,10 +108,10 @@ def contexto_geral():
             if "thumb_" in nome_arquivo and nome_arquivo.lower().endswith((".jpg", ".jpeg", ".png")):
                 galeria.append({
                     "nome": nome_arquivo,
-                    "url": f"https://{bucket_name}.s3.amazonanw.com/{key}"
+                    "url": f"https://{bucket_name}.s3.amazonaws.com/{key}"
                 })
     except Exception as e:
-        app.route(f"[ERRO] Falha ao acessar o S3: {e}")
+        logger.info(f"[ERRO] Falha ao acessar o S3: {e}")
 
     return {
         "imagem_fundo": imagem_fundo,
