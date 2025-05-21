@@ -251,37 +251,49 @@ def extensao_permitida(nome_arquivo):
 
 @app.route("/upload-imagens", methods=["POST"])
 def upload_imagens():
+    print("[UPLOAD]  🚀 Iniciando rota /upload-imagens")
+
     if "imagens" not in request.files:
+        print("[UPLOAD][ERRO] Nenhum campo 'imagens' encontrado em request.files")
         return {"erro": "Nenhum arquivo encontrado"}, 400
     
     arquivos = request.files.getlist("imagens")
+    print(f"[UPLOAD] Total de arquivos recebidos: {len(arquivos)}")
+
     salvos = []
 
-    for arquivo in arquivos:
-        print(f"[UPLOAD] Enviando imagem: {nome_seguro}")
+    for i, arquivo in enumerate(arquivos):
+        print(f"[UPLOAD] >> Processando arquivo {i + 1}/{len(arquivos)}")
+        print(f"[UPLOAD] Nome original: {arquivo.filename}")
         
-        if arquivo and extensao_permitida(arquivo.filename):
-            nome_seguro = secure_filename(arquivo.filename)
-            # caminho = os.path.join(app.config["UPLOAD_FOLDER"], nome_seguro)
+        if not arquivo:
+            print(f"[UPLOAD][ERRO] Arquivo {i + 1} está vazio ou inválido")
+            continue
 
-            # ✅ Garante que a pasta exista antes de salvar
-            # os.makedirs(os.path.dirname(caminho), exist_ok=True)
+        if not extensao_permitida(arquivo.filename):
+            print(f"[UPLOAD][ERRO] Extensão nnao permitida: {arquivo.filename}")
+            continue
+
+        try:
+            nome_seguro = secure_filename(arquivo.filename)
+            print(f"[UPLOAD] Nome seguro gerado: {nome_seguro}")
 
             imagem = Image.open(arquivo)
             imagem = imagem.convert("RGB")
 
             # Redimensiona imagem original para no máx. 1600x1600
             imagem.thumbnail((1600, 1600))
+            print("[UPLOAD] Imagem convertida e redimensionada com sucesso")
 
             buffer = BytesIO()
-            # caminho = os.path.splitext(caminho) [0] + ".jpg"
-            # imagem.save(caminho, format="JPEG", quality=65, optimize=True)
             imagem.save(buffer, format="JPEG", quality=65, optimize=True)
             buffer.seek(0)
-            # salvos.append(os.path.basename(caminho))
+            print(f"[UPLOAD] Buffer principal pronto: {buffer.getbuffer().nbytes} bytes")
 
             # Envia imagem otimizada
+            print("[UPLOAD] Enviando imagem otimizada para o S3...")
             upload_arquivo_s3(buffer, nome_seguro, pasta="static/img/galeria", content_type="image/jpeg")
+            print(f"[UPLOAD] Upload da imagem principal concluída: {nome_seguro}")
 
             # Miniaturas
             thumb = imagem.copy()
@@ -289,11 +301,22 @@ def upload_imagens():
             buffer_thumb = BytesIO()
             thumb.save(buffer_thumb, format="JPEG", quality=50, optimize=True)
             buffer_thumb.seek(0)
+            print(f"[UPLOAD] Buffer da miniatura pronto: {buffer_thumb.getbuffer().nbytes} bytes")
 
             nome_thumb = f"thumb_{nome_seguro}"
+            print(f"[UPLOAD] Nome da miniatura: {nome_thumb}")
+
+            print("[UPLOAD] Enviando miniatura para o S3...")
             upload_arquivo_s3(buffer_thumb, nome_thumb, pasta="static/img/galeria", content_type="image/jpeg")
+            print(f"[UPLOAD] Upload da miniatura concluído: {nome_thumb}")
 
             salvos.append(nome_thumb)
+        
+        except Exception as e:
+            print(f"[UPLOAD][ERRO] Falha ao processar/enviar '{arquivo.filename}': {str(e)}")
+            continue
+    
+    print(f"[UPLOAD] ✅ Upload finalizado. Total de miniaturas salvas: {len(salvos)}")
     
     if salvos:
         return redirect(url_for("admin_dashboard", aba="imagens"))
