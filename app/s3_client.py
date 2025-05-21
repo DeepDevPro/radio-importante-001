@@ -6,16 +6,15 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
 BUCKET_NAME = "radioimportante-uploads"
 
-def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens"):
+def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens", content_type="application/octet-stream"):
     try:
         logger.info("[S3] Inicializando cliente")
         s3 = boto3.client("s3")
 
         chave = f"{pasta}/{uuid.uuid4().hex}_{nome_arquivo}"
-        content_type = arquivo.content_type  # 💡 Corrige erro de variável não definida
+        # content_type = arquivo.content_type  # 💡 Corrige erro de variável não definida
 
         logger.info(f"[S3] Pronto para enviar: {chave}")
         logger.info(f"[S3] Content-Type detectado: {content_type}")
