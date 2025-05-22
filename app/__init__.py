@@ -53,8 +53,19 @@ def home():
         session["indice_atual"] = 0
     else:
         shuffled = session["fila"]
+
+    playlist = [
+    f"https://radioimportante-uploads.s3.amazonaws.com/static/musicas/otimizadas/{m}"
+    for m in session.get("fila", [])
+    ]
     
-    return render_template("home.html", nome="Rádio Importante", musicas=musicas, fila=shuffled)
+    return render_template(
+        "home.html",
+        nome="Rádio Importante",
+        musicas=musicas,
+        fila=shuffled,
+        playlist=playlist
+        )
 
 @app.route("/user-login")
 def login_page():

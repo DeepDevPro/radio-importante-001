@@ -47,28 +47,22 @@
 			</div>
 		</div>
 
-		<!-- <script>
-			window.playlist = {{ fila | tojson }};
-			console.log("📀 Fila da sessão:", playlist);
-		</script> -->
-
-		<!-- <script>
-			const playlist = [
-			{% for m in session.get("fila", []) %}
-				"/static/musicas/otimizadas/{{ m }}"{% if not loop.last %},{% endif %}
-			{% endfor %}
-			];
-			console.log("🎶 Playlist gerada:", playlist);
-		</script> -->
-
 		<script>
+			window.playlist = {{ playlist | tojson }};
+			console.log("🎶 Playlist gerada (S3):", window.playlist);
+		</script>
+		
+		<!-- <script>
+			const Bucket = "radioimportante-uploads";
 			window.playlist = [
 			{% for m in session.get("fila", []) %}
-				"/static/musicas/otimizadas/{{ m }}"{% if not loop.last %},{% endif %}
+				"https://" + "{{ BUCKET }}" + ".s3.amazonaws.com/static/musicas/otimizadas/{{ m }}"
+{% if not loop.last %},{% endif %}
 			{% endfor %}
 			];
-			console.log("🎶 Playlist gerada:", window.playlist);
-		</script>
+			console.log("🎶 Playlist gerada (S3):", window.playlist);
+		</script> -->
 
 	</body>
 </html>
+
