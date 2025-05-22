@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy # Importa a extensão para usar banco relacional
-import os, json, random                               # Para lidar com variáveis de ambiente
+import os, json, random, logging, boto3, psutil       # Para lidar com variáveis de ambiente
 from dotenv import load_dotenv          # Para carregar as variáveis do .env automaticamente
 from functools import wraps
 from werkzeug.utils import secure_filename
@@ -10,7 +10,6 @@ from app.models import User, db, Track
 from datetime import timedelta
 from app.s3_client import upload_arquivo_s3
 from io import BytesIO
-import logging, boto3
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -270,107 +269,113 @@ def extensao_permitida(nome_arquivo):
     return "." in nome_arquivo and \
             nome_arquivo.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route("/upload-imagens", methods=["POST"])
-def upload_imagens():
-    logger.info("[UPLOAD]  🚀 Iniciando rota /upload-imagens")
+# @app.route("/upload-imagens", methods=["POST"])
+# def upload_imagens():
+#     logger.info("[UPLOAD]  🚀 Iniciando rota /upload-imagens")
 
-    if "imagens" not in request.files:
-        logger.info("[UPLOAD][ERRO] Nenhum campo 'imagens' encontrado em request.files")
-        return {"erro": "Nenhum arquivo encontrado"}, 400
+#     if "imagens" not in request.files:
+#         logger.info("[UPLOAD][ERRO] Nenhum campo 'imagens' encontrado em request.files")
+#         return {"erro": "Nenhum arquivo encontrado"}, 400
     
-    arquivos = request.files.getlist("imagens")
-    logger.info(f"[UPLOAD] Total de arquivos recebidos: {len(arquivos)}")
+#     arquivos = request.files.getlist("imagens")
+#     logger.info(f"[UPLOAD] Total de arquivos recebidos: {len(arquivos)}")
 
-    salvos = []
+#     salvos = []
 
-    for i, arquivo in enumerate(arquivos):
-        logger.info(f"[UPLOAD] >> Processando arquivo {i + 1}/{len(arquivos)}")
-        logger.info(f"[UPLOAD] Nome original: {arquivo.filename}")
+#     for i, arquivo in enumerate(arquivos):
+#         logger.info(f"[UPLOAD] >> Processando arquivo {i + 1}/{len(arquivos)}")
+#         logger.info(f"[UPLOAD] Nome original: {arquivo.filename}")
         
-        if not arquivo:
-            logger.info(f"[UPLOAD][ERRO] Arquivo {i + 1} está vazio ou inválido")
-            continue
+#         if not arquivo:
+#             logger.info(f"[UPLOAD][ERRO] Arquivo {i + 1} está vazio ou inválido")
+#             continue
 
-        if not extensao_permitida(arquivo.filename):
-            logger.info(f"[UPLOAD][ERRO] Extensão nnao permitida: {arquivo.filename}")
-            continue
+#         if not extensao_permitida(arquivo.filename):
+#             logger.info(f"[UPLOAD][ERRO] Extensão nnao permitida: {arquivo.filename}")
+#             continue
 
-        try:
-            nome_seguro = secure_filename(arquivo.filename)
-            logger.info(f"[UPLOAD] Nome seguro gerado: {nome_seguro}")
+#         try:
+#             nome_seguro = secure_filename(arquivo.filename)
+#             logger.info(f"[UPLOAD] Nome seguro gerado: {nome_seguro}")
 
-            imagem = Image.open(arquivo)
-            imagem = imagem.convert("RGB")
+#             imagem = Image.open(arquivo)
+#             imagem = imagem.convert("RGB")
 
-            # Redimensiona imagem original para no máx. 1600x1600
-            imagem.thumbnail((1600, 1600))
-            logger.info("[UPLOAD] Imagem convertida e redimensionada com sucesso")
+#             # Redimensiona imagem original para no máx. 1600x1600
+#             imagem.thumbnail((1600, 1600))
+#             logger.info("[UPLOAD] Imagem convertida e redimensionada com sucesso")
 
-            buffer = BytesIO()
-            imagem.save(buffer, format="JPEG", quality=65, optimize=True)
-            buffer.seek(0)
-            logger.info(f"[UPLOAD] Buffer principal pronto: {buffer.getbuffer().nbytes} bytes")
+#             buffer = BytesIO()
+#             imagem.save(buffer, format="JPEG", quality=65, optimize=True)
+#             buffer.seek(0)
+#             logger.info(f"[UPLOAD] Buffer principal pronto: {buffer.getbuffer().nbytes} bytes")
 
-            # Envia imagem otimizada
-            logger.info("[UPLOAD] Enviando imagem otimizada para o S3...")
-            upload_arquivo_s3(buffer, nome_seguro, pasta="static/img/galeria", content_type="image/jpeg")
-            logger.info(f"[UPLOAD] Upload da imagem principal concluída: {nome_seguro}")
+#             # Envia imagem otimizada
+#             logger.info("[UPLOAD] Enviando imagem otimizada para o S3...")
+#             upload_arquivo_s3(buffer, nome_seguro, pasta="static/img/galeria", content_type="image/jpeg")
+#             logger.info(f"[UPLOAD] Upload da imagem principal concluída: {nome_seguro}")
 
-            # Miniaturas
-            thumb = imagem.copy()
-            thumb.thumbnail((300, 300))
-            buffer_thumb = BytesIO()
-            thumb.save(buffer_thumb, format="JPEG", quality=50, optimize=True)
-            buffer_thumb.seek(0)
-            logger.info(f"[UPLOAD] Buffer da miniatura pronto: {buffer_thumb.getbuffer().nbytes} bytes")
+#             # Miniaturas
+#             thumb = imagem.copy()
+#             thumb.thumbnail((300, 300))
+#             buffer_thumb = BytesIO()
+#             thumb.save(buffer_thumb, format="JPEG", quality=50, optimize=True)
+#             buffer_thumb.seek(0)
+#             logger.info(f"[UPLOAD] Buffer da miniatura pronto: {buffer_thumb.getbuffer().nbytes} bytes")
 
-            nome_thumb = f"thumb_{nome_seguro}"
-            logger.info(f"[UPLOAD] Nome da miniatura: {nome_thumb}")
+#             nome_thumb = f"thumb_{nome_seguro}"
+#             logger.info(f"[UPLOAD] Nome da miniatura: {nome_thumb}")
 
-            logger.info("[UPLOAD] Enviando miniatura para o S3...")
-            upload_arquivo_s3(buffer_thumb, nome_thumb, pasta="static/img/galeria", content_type="image/jpeg")
-            logger.info(f"[UPLOAD] Upload da miniatura concluído: {nome_thumb}")
+#             logger.info("[UPLOAD] Enviando miniatura para o S3...")
+#             upload_arquivo_s3(buffer_thumb, nome_thumb, pasta="static/img/galeria", content_type="image/jpeg")
+#             logger.info(f"[UPLOAD] Upload da miniatura concluído: {nome_thumb}")
 
-            salvos.append(nome_thumb)
+#             salvos.append(nome_thumb)
         
-        except Exception as e:
-            logger.info(f"[UPLOAD][ERRO] Falha ao processar/enviar '{arquivo.filename}': {str(e)}")
-            continue
+#         except Exception as e:
+#             logger.info(f"[UPLOAD][ERRO] Falha ao processar/enviar '{arquivo.filename}': {str(e)}")
+#             continue
     
-    logger.info(f"[UPLOAD] ✅ Upload finalizado. Total de miniaturas salvas: {len(salvos)}")
+#     logger.info(f"[UPLOAD] ✅ Upload finalizado. Total de miniaturas salvas: {len(salvos)}")
     
-    if salvos:
-        return redirect(url_for("admin_dashboard", aba="imagens"))
-    else:
-        return {"erro": "Nenhum arquivo válido"}, 400
+#     if salvos:
+#         return redirect(url_for("admin_dashboard", aba="imagens"))
+#     else:
+#         return {"erro": "Nenhum arquivo válido"}, 400
 
-@app.route("/definir-fundo", methods=["POST"])
-def definir_fundo():
-    imagem = request.form.get("imagem")
+# @app.route("/definir-fundo", methods=["POST"])
+# def definir_fundo():
+#     imagem = request.form.get("imagem")
 
-    if not imagem:
-        return{"erro": "Imagem não informada"}, 400
+#     if not imagem:
+#         return{"erro": "Imagem não informada"}, 400
     
-    # caminho_config = "config.json"
-    caminho_config = os.path.join(os.path.dirname(__file__), "..", "config.json")
-    caminho_config = os.path.abspath(caminho_config)
+#     # caminho_config = "config.json"
+#     caminho_config = os.path.join(os.path.dirname(__file__), "..", "config.json")
+#     caminho_config = os.path.abspath(caminho_config)
 
 
-    with open(caminho_config, "r") as f:
-        config = json.load(f)
+#     with open(caminho_config, "r") as f:
+#         config = json.load(f)
 
-    config["background_image"] = imagem
+#     config["background_image"] = imagem
 
-    with open(caminho_config, "w") as f:
-        json.dump(config, f, indent=2)
+#     with open(caminho_config, "w") as f:
+#         json.dump(config, f, indent=2)
     
-    return redirect(url_for("admin_dashboard", aba="imagens"))
+#     return redirect(url_for("admin_dashboard", aba="imagens"))
+
+def log_mem(tag=""):
+    process = psutil.Process(os.getpid())
+    logger.info(f"[MEMORIA] {tag} - {process.memory_info().rss / 1024 / 1024:.2f} MB")
 
 @app.route("/upload-musicas", methods=["POST"])
 def upload_musicas():
     arquivos = request.files.getlist("musicas")
 
     for arquivo in arquivos:
+        log_mem("🟢 Início do processamento de música")
+
         nome_seguro = secure_filename(arquivo.filename)
         nome_base = os.path.splitext(nome_seguro) [0]
         partes = nome_base.split("-")
@@ -386,15 +391,21 @@ def upload_musicas():
             titulo = titulo_versao
             versao = None
         
+        log_mem("📥 Antes de carregar com AudioSegment")
         audio = AudioSegment.from_file(arquivo)
+        log_mem("🎧 Após de carregar com AudioSegment")
+        
         audio = audio.set_channels(2).set_frame_rate(44100)
+        log_mem("🎛️ Após normalização de canais e sample rate")
 
         buffer = BytesIO()
         audio.export(buffer, format="mp3", bitrate="128k")
         buffer.seek(0)
+        log_mem("📦 Após exportar áudio otimizado para buffer")
 
         nome_final = f"{nome_base}.mp3"
         upload_arquivo_s3(buffer, nome_final, pasta="static/musicas/otimizadas")
+        log_mem("☁️ Após upload para S3")
 
         duracao = len(audio) // 1000
 
@@ -408,6 +419,7 @@ def upload_musicas():
         db.session.add(nova_musica)
     
     db.session.commit()
+    log_mem("✅ Final da rota /upload-musicas")
     return redirect("/admin-dashboard?aba=musicas")
 
 @app.route("/excluir-musicas", methods=["POST"])
