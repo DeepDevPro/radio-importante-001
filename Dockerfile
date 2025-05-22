@@ -27,4 +27,4 @@ COPY . .
 EXPOSE 5000
 
 # Comando para iniciar o servidor com Gunicorn
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "application:application", "--log-level=debug"]
+CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5000", "application:application", "--log-level=debug"]
