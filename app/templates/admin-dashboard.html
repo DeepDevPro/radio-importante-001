@@ -103,55 +103,6 @@
 					</form> 
 				</section>
 			</div>
-
-			<!--  ✅ Aba de Imagens (a ser preenchida na aula 4)  -->
-			<!-- <div class="aba aba-imagens"> -->
-				
-				<!-- Upload de Imagens -->
-				<section class="upload-box">
-					<h2>Upload de Imagens</h2>
-					
-					<div class="drop-area">
-						<form id="form-upload-imagem" action="/upload-imagens" method="POST" enctype="multipart/form-data" class="upload-form">
-							<h2>Upload de Imagens</h2>
-
-							<input type="file" name="imagens" id="input-imagem" multiple accept="image/png, image/jpeg">
-
-							<button type="submit" class="upload-button">Enviar Imagens</button>
-						</form>
-
-						<p>Clique aqui para selecionar ou arraste arquivos de imagem</p>
-
-						<p><small>Imagens JPG, PNG (máx. 25mb)</small></p>
-					</div>
-
-					<button class="upload-button">Enviar Imagens</button>
-				</section>
-
-				<!-- Galeria de Imagens -->
-				<section class="gallery-box">
-					<h2>Galeria de Imagens</h2>
-					<div class="image-gallery">
-						{% for imagem in galeria_imagens %}
-						<!-- {% set imagem_original = imagem.nome | replace('thumb_', '') %} -->
-						<!-- {% set imagem_original = imagem.nome.split('_')[-1] %} -->
-						<!-- {% set imagem_original = imagem.nome.split('_thumb_')[-1] %} -->
-						{% set imagem_original = imagem.nome %}
-
-						<div class="image-card {% if imagem_original == imagem_fundo %}active{% endif %}">
-							<!-- <img src="{{ url_for('static', filename='img/galeria/' ~ imagem) }}" alt="Imagem galeria"> -->
-							<!-- <img src="{{ imagem.url }}" data-nome="{{ imagem.nome }}"> -->
-							<img src="https://radioimportante-uploads.s3.amazonaws.com/static/img/galeria/{{ imagem.nome }}"> 
-						
-						<form action="/definir-fundo" method="POST">
-							<input type="hidden" name="imagem" value="{{ imagem_original }}">
-							<button class="set-bg-btn" type="submit">Usar como fundo</button>
-						</form>
-						</div>
-						{% endfor %}
-					</div>
-				</section>
-			<!-- </div> -->
 	
 		</main>
 	</div>
