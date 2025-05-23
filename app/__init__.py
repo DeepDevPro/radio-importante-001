@@ -55,10 +55,10 @@ def home():
         shuffled = session["fila"]
 
     playlist = [
-    f"https://radioimportante-uploads.s3.amazonaws.com/static/musicas/otimizadas/{m}"
-    for m in session.get("fila", [])
+        f"https://radioimportante-uploads.s3.amazonaws.com/static/musicas/otimizadas/{m}"
+        for m in session.get("fila", [])
     ]
-    
+
     return render_template(
         "home.html",
         nome="Rádio Importante",
