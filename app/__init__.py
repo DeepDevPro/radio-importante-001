@@ -59,6 +59,11 @@ def home():
         for m in session.get("fila", [])
     ]
 
+    logger.info("Session Fila: %s", session.get("fila"))
+    logger.info("Playlist gerada para o frontend: %s", playlist)
+    logger.info("Tracks carregadas do banco: %s", [t.nome_arquivo for t in musicas])
+
+
     return render_template(
         "home.html",
         nome="Rádio Importante",
@@ -66,6 +71,7 @@ def home():
         fila=shuffled,
         playlist=playlist
         )
+
 
 @app.route("/user-login")
 def login_page():
@@ -145,15 +151,6 @@ def admin_dashboard():
                            musicas=musicas,
                            total_musicas=len(musicas),
                            duracao_total=total_formatado)
-
-# Testando o funcionamento do S3
-@app.route("/testar-s3")
-def testar_s3():
-    try:
-        buckets = lista_buckets()
-        return jsonify({"buckets": buckets})
-    except Exception as e:
-        return jsonify({"erro": str(e)})
 
 # Criando a rota para inserir um usuário
 @app.route("/api/usuarios", methods=["POST"])
@@ -385,8 +382,6 @@ def upload_musicas():
     arquivos = request.files.getlist("musicas")
 
     for arquivo in arquivos:
-        log_mem("🟢 Início do processamento de música")
-
         nome_seguro = secure_filename(arquivo.filename)
         nome_base = os.path.splitext(nome_seguro) [0]
         partes = nome_base.split("-")
@@ -396,27 +391,29 @@ def upload_musicas():
 
         if "(" in titulo_versao:
             titulo, versao = titulo_versao.split("(", 1)
-            titulo - titulo.strip()
+            titulo = titulo.strip()
             versao = versao.strip(") ")
         else:
             titulo = titulo_versao
             versao = None
         
-        log_mem("📥 Antes de carregar com AudioSegment")
+        logger.info("📥 Antes de carregar com AudioSegment")
         audio = AudioSegment.from_file(arquivo)
-        log_mem("🎧 Após de carregar com AudioSegment")
+        logger.info("🎧 Após de carregar com AudioSegment")
         
         audio = audio.set_channels(2).set_frame_rate(44100)
-        log_mem("🎛️ Após normalização de canais e sample rate")
+        logger.info("🎛️ Após normalização de canais e sample rate")
 
         buffer = BytesIO()
         audio.export(buffer, format="mp3", bitrate="128k")
         buffer.seek(0)
-        log_mem("📦 Após exportar áudio otimizado para buffer")
+        logger.info("📦 Após exportar áudio otimizado para buffer")
 
         nome_final = f"{nome_base}.mp3"
+        logger.info("Salvando em: static/musicas/otimizadas/%s", nome_final)
+
         upload_arquivo_s3(buffer, nome_final, pasta="static/musicas/otimizadas")
-        log_mem("☁️ Após upload para S3")
+        logger.info("☁️ Após upload para S3")
 
         duracao = len(audio) // 1000
 
@@ -430,7 +427,12 @@ def upload_musicas():
         db.session.add(nova_musica)
     
     db.session.commit()
-    log_mem("✅ Final da rota /upload-musicas")
+    logger.info("✅ Final da rota /upload-musicas")
+
+    session["fila"] = []
+    session["indice_atual"] = 0
+    logger.info("🗑️ Session['fila'] reiniciada após upload")
+
     return redirect("/admin-dashboard?aba=musicas")
 
 @app.route("/excluir-musicas", methods=["POST"])
@@ -445,6 +447,7 @@ def excluir_musicas():
     for musica in musicas:
         # Apaga o arquivo de áudio
         caminho = os.path.join("app", "static", "musicas", "otimizadas", musica.nome_arquivo)
+        logger.info("Música excluída: %s", musica.nome_arquivo)
         if os.path.exists(caminho):
             os.remove(caminho)
         
@@ -452,6 +455,11 @@ def excluir_musicas():
         db.session.delete(musica)
 
     db.session.commit()
+
+    session["fila"] = []
+    session["indice_atual"] = 0
+    logger.info("Session['fila'] reiniciada após upload")
+
     return redirect(url_for("admin_dashboard", aba="musicas"))
 
 
