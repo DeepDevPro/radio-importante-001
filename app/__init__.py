@@ -462,4 +462,9 @@ def excluir_musicas():
 
     return redirect(url_for("admin_dashboard", aba="musicas"))
 
+@app.route("/reset-session")
+def reset_session():
+    session.clear()
+    return "Sessão resetada com sucesso!"
+
 
