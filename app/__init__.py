@@ -393,59 +393,71 @@ def log_mem(tag=""):
 def upload_musicas():
     arquivos = request.files.getlist("musicas")
 
-    for arquivo in arquivos:
-        nome_seguro = secure_filename(arquivo.filename)
-        nome_base = os.path.splitext(nome_seguro)[0]
-        partes = nome_base.split("-")
+    try:
+        for arquivo in arquivos:
+            nome_seguro = secure_filename(arquivo.filename)
+            nome_base = os.path.splitext(nome_seguro)[0]
+            partes = nome_base.split("-")
     
-        artista = partes[0].strip() if len(partes) > 0 else "Desconhecido"
-        titulo_versao = partes[1].strip() if len(partes) > 1 else "Sem Título"
+            artista = partes[0].strip() if len(partes) > 0 else "Desconhecido"
+            titulo_versao = partes[1].strip() if len(partes) > 1 else "Sem Título"
 
-        if "(" in titulo_versao:
-            titulo, versao = titulo_versao.split("(", 1)
-            titulo = titulo.strip()
-            versao = versao.strip(") ")
-        else:
-            titulo = titulo_versao
-            versao = None
+            if "(" in titulo_versao:
+                titulo, versao = titulo_versao.split("(", 1)
+                titulo = titulo.strip()
+                versao = versao.strip(") ")
+            else:
+                titulo = titulo_versao
+                versao = None
 
-        logger.info("📥 Antes de carregar com AudioSegment")
-        audio = AudioSegment.from_file(arquivo)
-        logger.info("🎧 Após de carregar com AudioSegment")
+            logger.info("📥 Antes de carregar com AudioSegment")
+
+            logger.info("Arquivo recebido: %s", arquivo.filename)
+            logger.info("Tipo MIME: %s", arquivo.content_type)
+            logger.info("Tamanho (bytes): %d", len(arquivo.read()))
+            arquivo.seek(0)  # volta pro início após read
+
+            audio = AudioSegment.from_file(arquivo)
+            logger.info("🎧 Após carregar com AudioSegment")
+            
+            audio = audio.set_channels(2).set_frame_rate(44100)
+            logger.info("🎛️ Após normalização de canais e sample rate")
+
+            buffer = BytesIO()
+            audio.export(buffer, format="mp3", bitrate="128k")
+            buffer.seek(0)
+            logger.info("📦 Após exportar áudio otimizado para buffer")
+
+            # nome_final = f"{nome_base}.mp3"
+            uuid_id = uuid.uuid4().hex[:24]  # opcional: só parte do UUID
+            nome_final = f"{uuid_id}_{nome_base}.mp3"
+            logger.info("Salvando em: static/musicas/otimizadas/%s", nome_final)
+
+            upload_arquivo_s3(buffer, nome_final, pasta="static/musicas/otimizadas")
+            logger.info("☁️ Após upload para S3")
+
+            nova_musica = Track(
+                artista=artista,
+                titulo=titulo,
+                versao=versao,
+                duracao_segundos=len(audio) // 1000,
+                nome_arquivo=nome_final
+            )
+            db.session.add(nova_musica)
         
-        audio = audio.set_channels(2).set_frame_rate(44100)
-        logger.info("🎛️ Após normalização de canais e sample rate")
+        db.session.commit()
+        logger.info("✅ Final da rota /upload-musicas")
 
-        buffer = BytesIO()
-        audio.export(buffer, format="mp3", bitrate="128k")
-        buffer.seek(0)
-        logger.info("📦 Após exportar áudio otimizado para buffer")
+        session["fila"] = []
+        session["indice_atual"] = 0
+        logger.info("🗑️ Session['fila'] reiniciada após upload")
 
-        # nome_final = f"{nome_base}.mp3"
-        uuid_id = uuid.uuid4().hex[:24]  # opcional: só parte do UUID
-        nome_final = f"{uuid_id}_{nome_base}.mp3"
-        logger.info("Salvando em: static/musicas/otimizadas/%s", nome_final)
-
-        upload_arquivo_s3(buffer, nome_final, pasta="static/musicas/otimizadas")
-        logger.info("☁️ Após upload para S3")
-
-        nova_musica = Track(
-            artista=artista,
-            titulo=titulo,
-            versao=versao,
-            duracao_segundos=len(audio) // 1000,
-            nome_arquivo=nome_final
-        )
-        db.session.add(nova_musica)
+        return redirect("/admin-dashboard?aba=musicas")
     
-    db.session.commit()
-    logger.info("✅ Final da rota /upload-musicas")
+    except Exception as e:
+        logger.exception("🔥 Erro durante upload de músicas")
+        return "Erro interno no servidor (upload)", 500
 
-    session["fila"] = []
-    session["indice_atual"] = 0
-    logger.info("🗑️ Session['fila'] reiniciada após upload")
-
-    return redirect("/admin-dashboard?aba=musicas")
 
 @app.route("/excluir-musicas", methods=["POST"])
 def excluir_musicas():
