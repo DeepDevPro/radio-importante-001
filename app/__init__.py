@@ -46,7 +46,14 @@ def home():
     nomes = [m.nome_arquivo for m in musicas]
 
     # Se não tiver fila salva na sessão, gera nova
-    if "fila" not in session or not session["fila"]:
+    # if "fila" not in session or not session["fila"]:
+    #     shuffled = nomes.copy()
+    #     random.shuffle(shuffled)
+    #     session["fila"] = shuffled
+    #     session["indice_atual"] = 0
+    # 🔐 Se a session estiver ausente ou defasada, reembaralha
+    if "fila" not in session or set(session["fila"]) != set(nomes):
+        logger.info("🛡️ Resetando session['fila'] por diferença entre banco e session")
         shuffled = nomes.copy()
         random.shuffle(shuffled)
         session["fila"] = shuffled
@@ -55,14 +62,20 @@ def home():
         shuffled = session["fila"]
 
     playlist = [
-        f"https://radioimportante-uploads.s3.amazonaws.com/static/musicas/otimizadas/{m}"
+        f"https://radioimportante-uploads.s3.us-west-2.amazonaws.com/static/musicas/otimizadas/{m}"
         for m in session.get("fila", [])
     ]
 
+    # novo codigo sugerido pra rota completa, mas preferi deixar no código corrigido sobre esse topico antes pra ver se funciona, se não funcionar aí testo com esse, se funcionar posso apaga-lo.
+    # playlist = [
+    #     f"https://radioimportante-uploads.s3.us-west-2.amazonaws.com/static/musicas/otimizadas/{m}"
+    #     for m in session["fila"]
+    # ]
+
     logger.info("Session Fila: %s", session.get("fila"))
     logger.info("Playlist gerada para o frontend: %s", playlist)
-    logger.info("Tracks carregadas do banco: %s", [t.nome_arquivo for t in musicas])
-
+    # logger.info("Tracks carregadas do banco: %s", [t.nome_arquivo for t in musicas])
+    logger.info("Tracks carregadas do banco: %s", nomes)
 
     return render_template(
         "home.html",
@@ -71,7 +84,6 @@ def home():
         fila=shuffled,
         playlist=playlist
         )
-
 
 @app.route("/user-login")
 def login_page():
@@ -409,7 +421,9 @@ def upload_musicas():
         buffer.seek(0)
         logger.info("📦 Após exportar áudio otimizado para buffer")
 
-        nome_final = f"{nome_base}.mp3"
+        # nome_final = f"{nome_base}.mp3"
+        uuid_id = uuid.uuid4().hex[:24]  # opcional: só parte do UUID
+        nome_final = f"{uuid_id}_{nome_base}.mp3"
         logger.info("Salvando em: static/musicas/otimizadas/%s", nome_final)
 
         upload_arquivo_s3(buffer, nome_final, pasta="static/musicas/otimizadas")
