@@ -411,15 +411,17 @@ def upload_musicas():
                 versao = None
 
             logger.info("📥 Antes de carregar com AudioSegment")
-
             logger.info("Arquivo recebido: %s", arquivo.filename)
             logger.info("Tipo MIME: %s", arquivo.content_type)
-            logger.info("Tamanho (bytes): %d", len(arquivo.read()))
-            arquivo.seek(0)  # volta pro início após read
-
-            audio = AudioSegment.from_file(arquivo)
-            logger.info("🎧 Após carregar com AudioSegment")
             
+            # SOLUÇÃO: use stream diretamente
+            audio = AudioSegment.from_file(arquivo.stream)
+            logger.info("🎧 Após carregar com AudioSegment")
+
+            # arquivo_bytes = arquivo.read()
+            # logger.info("Tamanho (bytes): %d", len(arquivo_bytes))
+            # arquivo.seek(0)  # volta pro início após read
+
             audio = audio.set_channels(2).set_frame_rate(44100)
             logger.info("🎛️ Após normalização de canais e sample rate")
 
