@@ -13,7 +13,7 @@ def upload_arquivo_s3(arquivo, nome_arquivo, pasta="imagens", content_type="appl
         logger.info("[S3] Inicializando cliente")
         s3 = boto3.client("s3")
 
-        chave = f"{pasta}/{uuid.uuid4().hex}_{nome_arquivo}"
+        chave = f"{pasta}/{nome_arquivo}"  # ← importante!
         # content_type = arquivo.content_type  # 💡 Corrige erro de variável não definida
 
         logger.info(f"[S3] Pronto para enviar: {chave}")

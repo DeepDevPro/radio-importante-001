@@ -5,11 +5,9 @@ from dotenv import load_dotenv          # Para carregar as variáveis do .env au
 from functools import wraps
 from werkzeug.utils import secure_filename
 from PIL import Image
-from pydub import AudioSegment
 from app.models import User, db, Track
 from datetime import timedelta
 from app.s3_client import upload_arquivo_s3
-from io import BytesIO
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -61,9 +59,14 @@ def home():
     else:
         shuffled = session["fila"]
 
+    # playlist = [
+    #     f"https://radioimportante-uploads.s3.us-west-2.amazonaws.com/static/musicas/otimizadas/{m}"
+    #     for m in session.get("fila", [])
+    # ]
+
     playlist = [
         f"https://radioimportante-uploads.s3.us-west-2.amazonaws.com/static/musicas/otimizadas/{m}"
-        for m in session.get("fila", [])
+        for m in session["fila"]
     ]
 
     # novo codigo sugerido pra rota completa, mas preferi deixar no código corrigido sobre esse topico antes pra ver se funciona, se não funcionar aí testo com esse, se funcionar posso apaga-lo.
@@ -410,39 +413,19 @@ def upload_musicas():
                 titulo = titulo_versao
                 versao = None
 
-            logger.info("📥 Antes de carregar com AudioSegment")
-            logger.info("Arquivo recebido: %s", arquivo.filename)
-            logger.info("Tipo MIME: %s", arquivo.content_type)
-            
-            # SOLUÇÃO: use stream diretamente
-            audio = AudioSegment.from_file(arquivo.stream)
-            logger.info("🎧 Após carregar com AudioSegment")
-
-            # arquivo_bytes = arquivo.read()
-            # logger.info("Tamanho (bytes): %d", len(arquivo_bytes))
-            # arquivo.seek(0)  # volta pro início após read
-
-            audio = audio.set_channels(2).set_frame_rate(44100)
-            logger.info("🎛️ Após normalização de canais e sample rate")
-
-            buffer = BytesIO()
-            audio.export(buffer, format="mp3", bitrate="128k")
-            buffer.seek(0)
-            logger.info("📦 Após exportar áudio otimizado para buffer")
-
-            # nome_final = f"{nome_base}.mp3"
-            uuid_id = uuid.uuid4().hex[:24]  # opcional: só parte do UUID
-            nome_final = f"{uuid_id}_{nome_base}.mp3"
+            uuid_id = uuid.uuid4().hex[:24]
+            nome_final = f"{uuid_id}_{nome_seguro}"
             logger.info("Salvando em: static/musicas/otimizadas/%s", nome_final)
 
-            upload_arquivo_s3(buffer, nome_final, pasta="static/musicas/otimizadas")
+            buffer = arquivo.stream
+            upload_arquivo_s3(buffer, nome_final, pasta="static/musicas/otimizadas", content_type="audio/mpeg")
             logger.info("☁️ Após upload para S3")
 
             nova_musica = Track(
                 artista=artista,
                 titulo=titulo,
                 versao=versao,
-                duracao_segundos=len(audio) // 1000,
+                duracao_segundos=0,
                 nome_arquivo=nome_final
             )
             db.session.add(nova_musica)
@@ -494,3 +477,5 @@ def reset_session():
     return "Sessão resetada com sucesso!"
 
 
+if __name__ == "__main__":
+    app.run(debug=True)
