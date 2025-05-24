@@ -395,9 +395,9 @@ def upload_musicas():
 
     for arquivo in arquivos:
         nome_seguro = secure_filename(arquivo.filename)
-        nome_base = os.path.splitext(nome_seguro) [0]
+        nome_base = os.path.splitext(nome_seguro)[0]
         partes = nome_base.split("-")
-
+    
         artista = partes[0].strip() if len(partes) > 0 else "Desconhecido"
         titulo_versao = partes[1].strip() if len(partes) > 1 else "Sem Título"
 
@@ -408,7 +408,7 @@ def upload_musicas():
         else:
             titulo = titulo_versao
             versao = None
-        
+
         logger.info("📥 Antes de carregar com AudioSegment")
         audio = AudioSegment.from_file(arquivo)
         logger.info("🎧 Após de carregar com AudioSegment")
@@ -429,13 +429,11 @@ def upload_musicas():
         upload_arquivo_s3(buffer, nome_final, pasta="static/musicas/otimizadas")
         logger.info("☁️ Após upload para S3")
 
-        duracao = len(audio) // 1000
-
         nova_musica = Track(
             artista=artista,
             titulo=titulo,
             versao=versao,
-            duracao_segundos=duracao,
+            duracao_segundos=len(audio) // 1000,
             nome_arquivo=nome_final
         )
         db.session.add(nova_musica)
