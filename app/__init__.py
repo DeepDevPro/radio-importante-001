@@ -300,15 +300,26 @@ def log_mem(tag=""):
 def upload_musicas():
     arquivos = request.files.getlist("musicas")
 
+    logger.info("🆙 Iniciando upload de músicas")
+    logger.info("Arquivos recebidos: %d", len(arquivos))
+    for a in arquivos:
+        logger.info("Arquivo: %s (%s)", a.filename, a.content_type)
+
     try:
         for arquivo in arquivos:
             nome_seguro = secure_filename(arquivo.filename)
             nome_base = os.path.splitext(nome_seguro)[0]
-            partes = nome_base.split("-")
     
-            artista = partes[0].strip() if len(partes) > 0 else "Desconhecido"
-            titulo_versao = partes[1].strip() if len(partes) > 1 else "Sem Título"
-
+            # ✅ Protege contra falta de hífen no nome do arquivo
+            if "-" in nome_base:
+                artista, titulo_versao = nome_base.split("-", 1)
+                artista = artista.strip()
+                titulo_versao = titulo_versao.strip()
+            else:
+                artista = "Desconhecido"
+                titulo_versao = nome_base.strip()
+            
+            # ✅ Protege contra ausência de versão entre parênteses
             if "(" in titulo_versao:
                 titulo, versao = titulo_versao.split("(", 1)
                 titulo = titulo.strip()
