@@ -335,7 +335,7 @@ def upload_musicas():
                 titulo=titulo,
                 versao=versao,
                 # duracao_segundos=int(duracoes[i]) if i < len(duracoes) else 0,
-                duracao_segundos = int(duracoes[i]) if i < len(duracoes) and duracoes[i].isdigit() else 0
+                duracao_segundos = int(duracoes[i]) if i < len(duracoes) and duracoes[i].isdigit() else 0,
                 nome_arquivo=nome_final
             )
             db.session.add(nova_musica)
