@@ -59,21 +59,10 @@ def home():
     else:
         shuffled = session["fila"]
 
-    # playlist = [
-    #     f"https://radioimportante-uploads.s3.us-west-2.amazonaws.com/static/musicas/otimizadas/{m}"
-    #     for m in session.get("fila", [])
-    # ]
-
     playlist = [
         f"https://radioimportante-uploads.s3.us-west-2.amazonaws.com/static/musicas/otimizadas/{m}"
         for m in session["fila"]
     ]
-
-    # novo codigo sugerido pra rota completa, mas preferi deixar no código corrigido sobre esse topico antes pra ver se funciona, se não funcionar aí testo com esse, se funcionar posso apaga-lo.
-    # playlist = [
-    #     f"https://radioimportante-uploads.s3.us-west-2.amazonaws.com/static/musicas/otimizadas/{m}"
-    #     for m in session["fila"]
-    # ]
 
     logger.info("Session Fila: %s", session.get("fila"))
     logger.info("Playlist gerada para o frontend: %s", playlist)
@@ -283,8 +272,6 @@ def dashboard():
 # Diretório de upload de imagens (garanta que exista)
 UPLOAD_FOLDER = os.path.join("app", "static", "img", "galeria")
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-# MAX_WIDTH = 1600
-# THUMB_SIZE = (200, 200) # Para a galeria
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
@@ -299,6 +286,8 @@ def log_mem(tag=""):
 @app.route("/upload-musicas", methods=["POST"])
 def upload_musicas():
     arquivos = request.files.getlist("musicas")
+
+    duracoes = request.form.getlist("duracoes")
 
     logger.info("🆙 Iniciando upload de músicas")
     logger.info("Arquivos recebidos: %d", len(arquivos))
@@ -340,7 +329,7 @@ def upload_musicas():
                 artista=artista,
                 titulo=titulo,
                 versao=versao,
-                duracao_segundos=0,
+                duracao_segundos=int(duracoes[i]) if i < len(duracoes) else 0,
                 nome_arquivo=nome_final
             )
             db.session.add(nova_musica)

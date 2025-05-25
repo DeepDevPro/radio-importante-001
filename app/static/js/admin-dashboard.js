@@ -94,10 +94,32 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 
 			const formData = new FormData();
-			for (let i = 0; i < arquivos.length; i++) {
-				formData.append("musicas", arquivos[i]);
-			}
+			const duracoes = [];
+			let carregadas = 0;
 
+			for (let i = 0; i < arquivos.length; i++) {
+				const arquivo = arquivos[i];
+				formData.append("musicas", arquivo);
+
+				const audio = document.createElement("audio");
+				audio.preload = "metadata";
+				audio.src = URL.createObjectURL(arquivo);
+
+				audio.onloadedmetadata = function () {
+					const duracao = Math.floor(audio.duration);
+					duracoes.push(duracao);
+					carregadas++;
+
+					if (carregadas === arquivos.length) {
+						// Após coletar todas as durações
+						duracoes.forEach(d => formData.append("duracoes", d));
+						enviarFormData(formData);
+					}
+				};
+			}
+		});
+
+		function enviarFormData(formData) {
 			const xhr = new XMLHttpRequest();
 			xhr.open("POST", "/upload-musicas", true);
 
@@ -107,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
 					progressContainer.style.display = "block";
 					progressBar.style.width = `${percent}%`;
 
-					// Ativa o overlay após o upload
 					if (percent >= 100) {
 						document.querySelector(".processing-overlay").style.display = "flex";
 					}
@@ -115,9 +136,9 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 
 			xhr.onload = () => {
-				progressContainer.style.display = "none";  // sempre esconde progress bar
-				document.querySelector(".processing-overlay").style.display = "none"; // sempre remove overlay
-			
+				progressContainer.style.display = "none";
+				document.querySelector(".processing-overlay").style.display = "none";
+
 				if (xhr.status === 200) {
 					window.location.href = "/admin-dashboard?aba=musicas";
 				} else {
@@ -125,9 +146,9 @@ document.addEventListener("DOMContentLoaded", () => {
 					alert("Erro ao enviar as músicas.");
 				}
 			};
-			
+
 			xhr.send(formData);
-		});
+		}
 	}
 
 	// Seleção de músicas para exclusão
