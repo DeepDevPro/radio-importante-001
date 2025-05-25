@@ -64,7 +64,20 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 		document.getElementById("info-artista").textContent = artista;
 		document.getElementById("info-titulo").textContent = `"${tituloFormatado}"`;
+	
+		// 🔁 Aqui restauramos os listeners de fechar
 		modal.style.display = "flex";
 	});
 	
+	modal.addEventListener("click", () => {
+		modal.style.display = "none";
+	});
+	
+	document.addEventListener("keydown", (event) => {
+		if (event.key === "Escape") {
+			modal.style.display = "none";
+		}
+	});
+	
 });
+
