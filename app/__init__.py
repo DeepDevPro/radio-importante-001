@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from app.models import User, db, Track
 from datetime import timedelta
-from app.s3_client import upload_arquivo_s3
+from app.s3_client import upload_arquivo_s3, deletar_arquivo_s3
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -370,11 +370,8 @@ def excluir_musicas():
 
     for musica in musicas:
         # Apaga o arquivo de áudio
-        caminho = os.path.join("app", "static", "musicas", "otimizadas", musica.nome_arquivo)
-        logger.info("Música excluída: %s", musica.nome_arquivo)
-        if os.path.exists(caminho):
-            os.remove(caminho)
-        
+        deletar_arquivo_s3(musica.nome_arquivo)
+
         # Remove do banco
         db.session.delete(musica)
 
