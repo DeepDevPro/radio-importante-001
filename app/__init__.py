@@ -332,7 +332,7 @@ def upload_musicas():
             nome_final = f"{uuid_id}_{nome_seguro}"
             logger.info("Salvando em: static/musicas/otimizadas/%s", nome_final)
 
-            buffer = arquivo.stream
+            buffer = arquivo.stream.read()
             upload_arquivo_s3(buffer, nome_final, pasta="static/musicas/otimizadas", content_type="audio/mpeg")
             logger.info("☁️ Após upload para S3")
 
