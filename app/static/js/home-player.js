@@ -55,13 +55,15 @@ document.addEventListener("DOMContentLoaded", () => {
 		modal.style.display = "flex";
 	});
 
-	// fecharBtn.addEventListener("click", () => {
-	// 	modal.style.display = "none";
-	// });
-
-	// Fecha o modal ao clicar fora ou dentro do modal
 	modal.addEventListener("click", () => {
 		modal.style.display = "none";
 	});
 
+	document.addEventListener("keydown", (event) => {
+		if (event.key === "Escape") {
+			modal.style.display = "none";
+		}
+	});
+
 });
+
