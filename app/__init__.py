@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy # Importa a extensão para usar banco relacional
-import os, json, random, logging, boto3, psutil       # Para lidar com variáveis de ambiente
+import os, json, random, logging, boto3, psutil, uuid       # Para lidar com variáveis de ambiente
 from dotenv import load_dotenv          # Para carregar as variáveis do .env automaticamente
 from functools import wraps
 from werkzeug.utils import secure_filename
