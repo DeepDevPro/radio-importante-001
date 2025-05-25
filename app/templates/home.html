@@ -5,14 +5,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<title>Rádio Importante</title>
-		<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
 	</head>
 
 	<body class="body-home-radio">
-		<!-- CODIGO ANTIGO DO TEMPLATE -->
-		<!-- <h1>Olá, {{ nome }}! 🚀</h1> -->
-		<!-- <p>Este é o primeiro template HTML servido pelo Flask usando Jinja2.</p> -->
 
 		<audio id="player" preload="auto"></audio>
 		
@@ -26,21 +22,15 @@
 			</div>
 		</div>
 
-		<!-- <script src="{{ url_for('static', filename='js/set-background.js') }}"></script> -->
-
-		<!-- <script>
-			window.playlist = [
-				{% for m in musicas %}
-					"{{ url_for('static', filename='musicas/otimizadas/' ~ m.nome_arquivo) }}"{% if not loop.last %},{% endif %}
-				{% endfor %}
-			];
-			console.log("🎶 Playlist gerada:", playlist);
-		</script> -->
-
 		<script src="{{ url_for('static', filename='js/home-player.js') }}"></script>
 		
 		<div class="info-modal" id="info-modal" style="display: none;">
 			<div class="info-content">
+				<p class="info-descricao">
+					Você está ouvindo a Rádio Importante. Todas músicas aqui são extraídas direto de vinis de época.
+					Nosso objetivo é levar o mundo dos discos pra você. Uma curadoria com total liberdade de gêneros e época,
+					a única regra é que seja provinda de um disco de vinyl.
+				</p>
 				<div class="track-info">
 					<h2 id="info-artista">Artista</h2>
 					<p id="info-titulo">"Título da Música"</p>
@@ -52,17 +42,6 @@
 			window.playlist = {{ playlist | tojson }};
 			console.log("🎶 Playlist gerada (S3):", window.playlist);
 		</script>
-		
-		<!-- <script>
-			const Bucket = "radioimportante-uploads";
-			window.playlist = [
-			{% for m in session.get("fila", []) %}
-				"https://" + "{{ BUCKET }}" + ".s3.amazonaws.com/static/musicas/otimizadas/{{ m }}"
-{% if not loop.last %},{% endif %}
-			{% endfor %}
-			];
-			console.log("🎶 Playlist gerada (S3):", window.playlist);
-		</script> -->
 
 	</body>
 </html>
