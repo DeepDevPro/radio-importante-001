@@ -55,7 +55,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		modal.style.display = "flex";
 	});
 
-	fecharBtn.addEventListener("click", () => {
+	// fecharBtn.addEventListener("click", () => {
+	// 	modal.style.display = "none";
+	// });
+
+	// Fecha o modal ao clicar fora ou dentro do modal
+	modal.addEventListener("click", () => {
 		modal.style.display = "none";
 	});
+
 });
