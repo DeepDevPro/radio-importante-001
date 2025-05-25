@@ -115,13 +115,17 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 
 			xhr.onload = () => {
+				progressContainer.style.display = "none";  // sempre esconde progress bar
+				document.querySelector(".processing-overlay").style.display = "none"; // sempre remove overlay
+			
 				if (xhr.status === 200) {
 					window.location.href = "/admin-dashboard?aba=musicas";
 				} else {
+					console.error("Erro na resposta do servidor:", xhr.responseText);
 					alert("Erro ao enviar as músicas.");
 				}
 			};
-
+			
 			xhr.send(formData);
 		});
 	}
