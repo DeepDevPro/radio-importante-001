@@ -49,21 +49,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// 🔍 Info Modal
 	infoBtn.addEventListener("click", () => {
-		const src = playlist[currentIndex];
-		const nomeArquivo = decodeURIComponent(src.split("/").pop().replace(".mp3", ""));
+		const atual = playlist[currentIndex];
+		const nomeArquivo = decodeURIComponent(atual.split("/").pop().replace(".mp3", ""));
+		
+		// Remove prefixo UUID até primeiro "_"
+		const nomeSemPrefixo = nomeArquivo.includes("_") ? nomeArquivo.split("_").slice(1).join("_") : nomeArquivo;
+
 		let artista = "Artista Desconhecido";
-		let tituloFormatado = "Faixa sem título";
+		let titulo = "Faixa sem título";
 	
-		if (nomeArquivo.includes("-")) {
-			const partes = nomeArquivo.split("-");
+		if (nomeSemPrefixo.includes("-")) {
+			const partes = nomeSemPrefixo.split("-");
 			artista = partes[0].trim();
-			tituloFormatado = partes.slice(1).join("-").replace(/_/g, " ").trim();
+			titulo = partes.slice(1).join("-").replace(/_/g, " ").trim();
 		} else {
-			tituloFormatado = nomeArquivo.replace(/_/g, " ");
+			titulo = nomeSemPrefixo.replace(/_/g, " ").trim();
 		}
 	
 		document.getElementById("info-artista").textContent = artista;
-		document.getElementById("info-titulo").textContent = `"${tituloFormatado}"`;
+		document.getElementById("info-titulo").textContent = `"${titulo}"`;
 	
 		// 🔁 Aqui restauramos os listeners de fechar
 		modal.style.display = "flex";
