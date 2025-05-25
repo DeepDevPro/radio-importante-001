@@ -494,3 +494,20 @@ html, body {
 	cursor: pointer;
 }
 
+.track-info {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.track-info h2 {
+	font-size: 24px;
+	color: white;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+
+.track-info p {
+	font-size: 18px;
+	color: #ccc;
+	margin: 0;
+}

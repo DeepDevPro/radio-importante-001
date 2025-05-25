@@ -38,11 +38,13 @@
 		</script> -->
 
 		<script src="{{ url_for('static', filename='js/home-player.js') }}"></script>
-
+		
 		<div class="info-modal" id="info-modal" style="display: none;">
 			<div class="info-content">
-				<h2 id="info-titulo">Título da Música</h2>
-				<p id="info-arquivo">Arquivo: nome.mp3</p>
+				<div class="track-info">
+					<h2 id="info-artista">Artista</h2>
+					<p id="info-titulo">"Título da Música"</p>
+				</div>
 			</div>
 		</div>
 

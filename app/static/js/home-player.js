@@ -49,21 +49,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// 🔍 Info Modal
 	infoBtn.addEventListener("click", () => {
-		const atual = playlist[currentIndex];
-		titulo.textContent = "🎵 Tocando agora";
-		arquivo.textContent = `Arquivo: ${atual.split("/").pop()}`;
+		const src = playlist[currentIndex];
+		const nomeArquivo = decodeURIComponent(src.split("/").pop().replace(".mp3", ""));
+		let artista = "Artista Desconhecido";
+		let tituloFormatado = "Faixa sem título";
+	
+		if (nomeArquivo.includes("-")) {
+			const partes = nomeArquivo.split("-");
+			artista = partes[0].trim();
+			tituloFormatado = partes.slice(1).join("-").replace(/_/g, " ").trim();
+		} else {
+			tituloFormatado = nomeArquivo.replace(/_/g, " ");
+		}
+	
+		document.getElementById("info-artista").textContent = artista;
+		document.getElementById("info-titulo").textContent = `"${tituloFormatado}"`;
 		modal.style.display = "flex";
 	});
-
-	modal.addEventListener("click", () => {
-		modal.style.display = "none";
-	});
-
-	document.addEventListener("keydown", (event) => {
-		if (event.key === "Escape") {
-			modal.style.display = "none";
-		}
-	});
-
+	
 });
-
