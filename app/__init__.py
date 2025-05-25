@@ -289,13 +289,18 @@ def upload_musicas():
 
     duracoes = request.form.getlist("duracoes")
 
+    if not duracoes:
+        duracoes = []
+        logger.warning("Nenhuma duração enviada via formulário — fallback para 0s.")
+
     logger.info("🆙 Iniciando upload de músicas")
     logger.info("Arquivos recebidos: %d", len(arquivos))
     for a in arquivos:
         logger.info("Arquivo: %s (%s)", a.filename, a.content_type)
 
     try:
-        for arquivo in arquivos:
+        # for arquivo in arquivos:
+        for i, arquivo in enumerate(arquivos):
             nome_seguro = secure_filename(arquivo.filename)
             nome_base = os.path.splitext(nome_seguro)[0]
     
@@ -329,7 +334,8 @@ def upload_musicas():
                 artista=artista,
                 titulo=titulo,
                 versao=versao,
-                duracao_segundos=int(duracoes[i]) if i < len(duracoes) else 0,
+                # duracao_segundos=int(duracoes[i]) if i < len(duracoes) else 0,
+                duracao_segundos = int(duracoes[i]) if i < len(duracoes) and duracoes[i].isdigit() else 0
                 nome_arquivo=nome_final
             )
             db.session.add(nova_musica)
