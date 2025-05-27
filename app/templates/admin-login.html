@@ -10,6 +10,11 @@
 		<div class="login-box">
 			<h2>Rádio Importante - Login do Administrador</h2>
 			<form method="POST" action="/admin-login">
+
+				{% if erro %}
+					<p class="erro">{{ erro }}</p>
+				{% endif %}
+				
 				<label for="email">Email:</label>
 				<input type="email" id="email" name="email" required>
 

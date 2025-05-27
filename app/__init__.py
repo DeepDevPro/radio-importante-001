@@ -81,9 +81,31 @@ def home():
 def login_page():
     return render_template("user-login.html")
 
-@app.route("/admin-login")
+# ANTIGA ROTA ADMIN - se a nova der certo já posso apagar essa
+# # @app.route("/admin-login")
+# def admin_login_page():
+#     return render_template("admin-login.html")
+
+@app.route("/admin-login", methods=["GET", "POST"])
 def admin_login_page():
+    if request.method == "POST":
+        email = request.form.get("email")
+        senha = request.form.get("senha")
+
+        usuario = User.query.filter_by(email=email).first()
+
+        if usuario and usuario.verificar_senha(senha):
+            session["usuario_id"] = usuario.id
+            return redirect("/admin-dashboard")
+        else:
+            return render_template("admin-login.html", erro="Credenciais inválidas")
+
     return render_template("admin-login.html")
+
+@app.route("/admin-logout")
+def admin_logout():
+    session.clear()
+    return redirect("/admin-login")
 
 # Nova rota de API
 @app.route("/api/status")
@@ -137,24 +159,6 @@ def contexto_geral():
         "imagem_fundo": imagem_fundo,
         "galeria_imagens": galeria
     }
-
-@app.route("/admin-dashboard")
-def admin_dashboard():
-    aba = request.args.get("aba", "musicas")
-#    return render_template("admin-dashboard.html", aba=aba)
-
-    # Consulta tods as músicas salvas no banco
-    musicas = Track.query.all()
-
-    # Calcula a duração total da playlist
-    total_segundos = sum(m.duracao_segundos or 0 for m in musicas)
-    total_formatado = str(timedelta(seconds=total_segundos))
-
-    return render_template("admin-dashboard.html",
-                           aba=aba,
-                           musicas=musicas,
-                           total_musicas=len(musicas),
-                           duracao_total=total_formatado)
 
 # Criando a rota para inserir um usuário
 @app.route("/api/usuarios", methods=["POST"])
@@ -282,6 +286,25 @@ def extensao_permitida(nome_arquivo):
 def log_mem(tag=""):
     process = psutil.Process(os.getpid())
     logger.info(f"[MEMORIA] {tag} - {process.memory_info().rss / 1024 / 1024:.2f} MB")
+
+@app.route("/admin-dashboard")
+@login_required
+def admin_dashboard():
+    aba = request.args.get("aba", "musicas")
+#    return render_template("admin-dashboard.html", aba=aba)
+
+    # Consulta tods as músicas salvas no banco
+    musicas = Track.query.all()
+
+    # Calcula a duração total da playlist
+    total_segundos = sum(m.duracao_segundos or 0 for m in musicas)
+    total_formatado = str(timedelta(seconds=total_segundos))
+
+    return render_template("admin-dashboard.html",
+                           aba=aba,
+                           musicas=musicas,
+                           total_musicas=len(musicas),
+                           duracao_total=total_formatado)
 
 @app.route("/upload-musicas", methods=["POST"])
 def upload_musicas():
