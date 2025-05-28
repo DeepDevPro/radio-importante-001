@@ -15,6 +15,10 @@
 		<div class="container">
 			<img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo">
 
+			<div id="musica-atual" class="musica-atual">
+				Tocando agora: <span id="musica-nome">Nada tocando</span>
+			</div>
+
 			<div class="controls">
 				<img id="play-btn" src="{{ url_for('static', filename='icons/play.svg') }}" alt="Play">
 				<img id="next-btn" src="{{ url_for('static', filename='icons/next-track.svg') }}" alt="Next">

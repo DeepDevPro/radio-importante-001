@@ -16,10 +16,34 @@ document.addEventListener("DOMContentLoaded", () => {
 		return;
 	}
 
+	// Se a função de baixo funcionar posso apagar essa, senão volto com ela;
+	// function tocarAtual() {
+	// 	audio.src = playlist[currentIndex];
+	// 	audio.play();
+	// 	playBtn.src = "/static/icons/pause.svg";
+	// }
+
 	function tocarAtual() {
-		audio.src = playlist[currentIndex];
+		const atual = playlist[currentIndex];
+		audio.src = atual;
 		audio.play();
 		playBtn.src = "/static/icons/pause.svg";
+
+		// 🔤 Extrai nome legível da música
+		const nomeArquivo = decodeURIComponent(atual.split("/").pop().replace(".mp3", ""));
+		const nomeSemPrefixo = nomeArquivo.includes("_") ? nomeArquivo.split("_").slice(1).join("_") : nomeArquivo;
+
+		let artista = "Desconhecido";
+		let titulo = nomeSemPrefixo.replace(/_/g, " ").trim();
+
+		if (nomeSemPrefixo.includes("-")) {
+			const partes = nomeSemPrefixo.split("-");
+			artista = partes[0].trim();
+			titulo = partes.slice(1).join("-").replace(/_/g, " ").trim();
+		}
+
+		// 🎵 Atualiza na tela
+		document.getElementById("musica-nome").textContent = `${artista} - ${titulo}`;
 	}
 
 	playBtn.addEventListener("click", () => {

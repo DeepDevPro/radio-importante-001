@@ -43,8 +43,16 @@ body, html {
 }
 
 .logo {
-	max-width: 500px;
+	max-width: 350px;
 	margin-top: 8rem;
+}
+
+.musica-atual {
+	text-align: center;
+	margin: 15px 0;
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: white;
 }
 
 .controls {
@@ -55,9 +63,10 @@ body, html {
 }
 
 .controls img {
-	width: 60px;
-	height: 60px;
+	width: 40px;
+	height: 40px;
 	cursor: pointer;
+	color: white;
 }
 
 
