@@ -9,3 +9,4 @@ with app.app_context():
     db.session.commit()
 
     print("Admin criado com sucesso!")
+
