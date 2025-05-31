@@ -10,53 +10,48 @@ body, html {
   background: url('../img/background.jpg') no-repeat center center fixed;
   background-size: cover;
   color: #271F30;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .container {
   max-width: 420px;
-  width: 100%;
+  margin: auto;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-  padding: 30px 0;
-  box-sizing: border-box;
   align-items: center;
-  text-align: center;
 }
 
 .logo {
   width: 180px;
-  margin-top: 20px;
-}
-
-.musica-atual {
-  font-family: 'Inter', sans-serif !important;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: white;
-  margin-top: 10px;
-}
-
-#musica-nome {
-  font-family: 'Inter', sans-serif !important;
+  display: block;
+  margin: 0 auto 20px;
 }
 
 .controls {
   display: flex;
   justify-content: center;
   gap: 16px;
-  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .controls img {
   width: 40px;
   height: 40px;
   cursor: pointer;
+}
+
+.musica-atual {
+  font-family: 'Inter', sans-serif !important;
+  max-width: 320px;
+  text-align: center;
+  margin: 15px 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+}
+
+#musica-nome {
+  font-family: 'Inter', sans-serif !important;
 }
 
 .info-modal {
