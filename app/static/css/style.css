@@ -473,42 +473,37 @@ html, body {
 
 .info-modal {
 	position: fixed;
-	top: 0;
-	max-width: 300px;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.7);
-	/* background: rgba(255, 250, 250, 0.7); */
-	/* background-color: #FFFAFA; */
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	z-index: 999;
+	pointer-events: none;
 }
 
 .info-content {
 	width: 360px;
 	max-width: 90vw;
-	margin: 20px auto;
 	padding: 20px;
-	/* background: #111; */
-	/* background: rgba(255, 250, 250, 0.7); */
-	/* background: #FFFAFA; */
-	background-color: rgba(255, 250, 250, 0.85); /* #FFFAFA com alpha */
-	color: rgb(26, 24, 24);
+	background-color: rgba(255, 255, 255, 0.92); /* fundo branco gelo */
+	color: #1a1a1a;
 	border-radius: 20px;
 	text-align: center;
-	/* box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); */
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-	font-family: 'Helvetica Neue', sans-serif;
+	font-family: 'Inter', sans-serif;
+	pointer-events: all;
 }
 
 .info-descricao {
 	font-size: 14px;
-	color: #ddd;
+	color: #444; /* texto descritivo mais escuro */
 	text-align: center;
 	margin-bottom: 20px;
 	line-height: 1.6;
-	padding: 0 40px;
+	padding: 0 20px;
 }
 
 .track-info {
@@ -517,22 +512,16 @@ html, body {
 }
 
 .track-info h2 {
-	font-size: 24px;
-	color: white;
-	margin-bottom: 10px;
-	font-weight: bold;
+	font-size: 20px;
+	color: #222; /* nome do artista em preto */
+	margin-bottom: 5px;
+	font-weight: 600;
 }
-
-/* .track-info p {
-	font-size: 18px;
-	color: #ccc;
-	margin: 0;
-	margin-top: 3rem;
-} */
 
 .track-info p {
-  font-size: 1.4rem;
-  margin-bottom: 15px;
-  font-weight: bold;
-  color: #271F30; /* uma das cores do projeto */
+	font-size: 16px;
+	color: #555; /* nome da música um tom abaixo do preto */
+	font-weight: 500;
+	margin: 0;
 }
+
