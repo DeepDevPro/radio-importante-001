@@ -1,4 +1,9 @@
 @font-face {
+  font-family: 'PressStart';
+  src: url('../fonts/PressStart2P-Regular.ttf') format('truetype');
+}
+
+/* @font-face {
   font-family: 'Inter';
   src: url('../fonts/Inter-Regular.ttf') format('truetype');
   font-weight: 400;
@@ -8,7 +13,7 @@
   font-family: 'Inter';
   src: url('../fonts/Inter-Bold.ttf') format('truetype');
   font-weight: 700;
-}
+} */
 
 /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); */
 
@@ -17,7 +22,8 @@ body, html {
   width: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'PressStart', sans-serif;
+  /* font-family: 'Inter', sans-serif !important; */
   background: url('../img/background.jpg') no-repeat center center fixed;
   background-size: cover;
   color: #271F30;
@@ -87,7 +93,7 @@ body, html {
   border-radius: 20px;
   text-align: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  font-family: 'Inter', sans-serif;
+  /* font-family: 'Inter', sans-serif; */
   pointer-events: all;
 }
 
