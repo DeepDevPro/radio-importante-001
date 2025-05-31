@@ -81,7 +81,7 @@
 								{% for musica in musicas %}
 								<tr>
 									<td><input type="checkbox" name="ids" value="{{ musica.id }}" class="check-musica"/></td>
-									<td>{{ loop.index }}</td>
+									<td>{{ (page - 1) * 100 + loop.index }}</td>
 									<td>{{ musica.artista.replace("_", " ") }}</td>
 									<td>{{ musica.titulo.replace("_", " ") }}</td>
 									<!-- <td>{{ musica.versao or "-" }}</td> -->
