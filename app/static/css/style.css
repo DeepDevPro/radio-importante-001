@@ -25,7 +25,7 @@
 body, html {
 	height: 100%;
 	width: 100%;
-	font-family: 'Inter', sans-serif;
+	font-family: 'Inter', sans-serif !important;
 }
 
 .body-home-radio {
@@ -57,15 +57,15 @@ body, html {
 	font-size: 1.2rem;
 	font-weight: bold;
 	color: white;
-	font-family: 'Inter', sans-serif;
+	font-family: 'Inter', sans-serif !important;
 }
 
 #musica-atual {
-	font-family: 'Inter', sans-serif;
+	font-family: 'Inter', sans-serif !important;
 }
 
 #musica-nome {
-	font-family: 'Inter', sans-serif;
+	font-family: 'Inter', sans-serif !important;
 }
 
 .controls {
