@@ -8,6 +8,7 @@ from PIL import Image
 from app.models import User, db, Track
 from datetime import timedelta
 from app.s3_client import upload_arquivo_s3, deletar_arquivo_s3
+from flask_session import Session
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -32,6 +33,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)    # (2) Agora vai vincular ao app
 
+app.config["SESSION_TYPE"] = "sqlalchemy"
+app.config["SESSION_SQLALCHEMY"] = db
+Session(app)
 
 @app.route("/health")
 def health():
