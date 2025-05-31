@@ -12,21 +12,13 @@ body, html {
   color: #271F30;
 }
 
-.background-cover {
-  background: url("/static/img/background.jpg") no-repeat center center fixed;
-  background-size: cover;
-}
-
-.card-box {
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-}
-
 .container {
   max-width: 420px;
   margin: auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .logo {
@@ -38,54 +30,75 @@ body, html {
 .controls {
   display: flex;
   justify-content: center;
+  gap: 16px;
   margin-top: 20px;
 }
 
-.track-info {
-  margin-top: 15px;
-  text-align: center;
+.controls img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 }
 
-#musica-atual, .musica-atual {
+.musica-atual {
   font-family: 'Inter', sans-serif !important;
+  max-width: 320px;
+  text-align: center;
+  margin: 15px 0;
   font-size: 1.2rem;
   font-weight: bold;
-  color: #271F30;
-  text-align: center;
-  max-width: 320px;
-  margin: 15px auto;
+  color: white;
 }
 
-.info-card {
+#musica-nome {
+  font-family: 'Inter', sans-serif !important;
+}
+
+.info-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.info-content {
   width: 360px;
   max-width: 90vw;
-  margin: 20px auto;
   padding: 20px;
-  background-color: rgba(255, 250, 250, 0.85);
+  background-color: rgba(255, 255, 255, 0.92);
+  color: #1a1a1a;
   border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-family: 'Inter', sans-serif;
+  pointer-events: all;
 }
 
-.track-title {
-  font-size: 1.4rem;
-  margin-bottom: 15px;
-  font-weight: bold;
-  color: #271F30;
+.info-descricao {
+  font-size: 14px;
+  color: #444;
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  padding: 0 20px;
 }
 
-.track-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.track-info h2 {
+  font-size: 20px;
+  color: #222;
+  margin-bottom: 5px;
+  font-weight: 600;
 }
 
-.tag {
-  background-color: #F97068;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  display: inline-block;
-  align-self: center;
+.track-info p {
+  font-size: 16px;
+  color: #555;
+  font-weight: 500;
+  margin: 0;
 }
