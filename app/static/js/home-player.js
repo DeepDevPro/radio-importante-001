@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 
 		// 🎵 Atualiza na tela
-		document.getElementById("musica-nome").innerHTML = `Tocando agora:<br>${artista}<br>"${titulo}"`;
+		document.getElementById("musica-nome").innerHTML = `${artista}<br>"${titulo}"`;
 
 	}
 
