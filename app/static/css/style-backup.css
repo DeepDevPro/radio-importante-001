@@ -1,0 +1,601 @@
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background: url('../img/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #271F30;
+}
+
+
+/* RESET GLOBAL BASICO */
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	list-style: none;
+	text-decoration: none;
+}
+
+/* USER LOGIN PAGE */
+.body-user-login {
+	background: url("/static/img/background.jpg") no-repeat center center fixed;
+	background-size: cover;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+/* HOME PAGE RADIO USER */
+
+body, html {
+	height: 100%;
+	width: 100%;
+	font-family: 'Inter', sans-serif !important;
+}
+
+.body-home-radio {
+	background: url("/static/img/background.jpg") no-repeat center center fixed;
+	background-size: cover;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	height: 100%;
+	padding: 2rem;
+}
+
+.logo {
+	max-width: 300px;
+	margin-top: 8rem;
+}
+
+.musica-atual {
+	max-width: 320px;
+	text-align: center;
+	margin: 15px 0;
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: white;
+	font-family: 'Inter', sans-serif !important;
+}
+
+#musica-atual {
+	font-family: 'Inter', sans-serif !important;
+}
+
+#musica-nome {
+	font-family: 'Inter', sans-serif !important;
+}
+
+.controls {
+	display: flex;
+	justify-content: center;
+	gap: 40px;
+	margin-bottom: 6rem;
+}
+
+.controls img {
+	width: 40px;
+	height: 40px;
+	cursor: pointer;
+}
+
+
+
+/* LOGIN DO ADMIN PAGE */
+
+.body-adm-login {
+	margin: 0;
+	padding: 0;
+	font-family: 'Segoe UI', sans-serif;
+	height: 100vh;
+	background: url("/static/img/background.jpg") no-repeat center center fixed;
+	background-size: cover;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+
+.body-adm-login::before {
+	content: "";
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%; height: 100%;
+	background-color: rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(6px);
+	z-index: 0;
+}
+
+.login-box {
+	position: relative;
+	z-index: 1;
+	background: rgba(0, 0, 0, 0.6);
+	padding: 40px;
+	border-radius: 12px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+	width: 90%;
+	max-width: 600px;
+	color: white;
+}
+
+.login-box h2 {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.login-box label {
+	display: block;
+	margin-bottom: 6px;
+	font-weight: 600;
+}
+
+.login-box input {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 20px;
+	border: none;
+	border-radius: 6px;
+	background-color: #222;
+	color: white;
+	font-size: 18px;
+}
+
+.login-box button {
+	width: 100%;
+	padding: 12px;
+	border: none;
+	border-radius: 6px;
+	background-color: #3b82f6;
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background 0.3s;
+}
+
+.login-box button:hover {
+	background-color: #2563eb;
+}
+
+
+
+/*  ==========  DASHBOARD ADMIN  ==========  */
+.body-admin-dash {
+	background: url("/static/img/background.jpg") no-repeat center center fixed; */
+	/* background-image: url("../img/background.jpg"); /* fallback */
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed; */
+	font-family: Arial, sans-serif;
+	color: white;
+	margin: 0;
+	padding: 2rem;
+	display: flex;
+	justify-content: center;
+}
+
+.body-admin-dash::before {
+	content: "";
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%;
+	height: 200vh;
+	min-height: 200vh;
+	background-color: rgba(0, 0, 0, 0.85);
+	backdrop-filter: blur(6px);
+	z-index: 0;
+}
+
+html, body {
+	height: 100%;
+}
+
+.box-admin-dash {
+	position: relative;
+	z-index: 1;
+	background: rgba(0, 0, 0, 0.6);
+	padding: 40px;
+	border-radius: 12px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+	width: 90%;
+	max-width: 1300px;
+	color: white;
+}
+
+.admin-dash-title {
+	text-align: center;
+	margin-bottom: 5rem;
+}
+
+.admin-dash-tabs {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+	margin-bottom: 2rem;
+}
+
+.tab {
+	padding: 0.6rem 1.5rem;
+	border: none;
+	border-bottom: 3px solid transparent;
+	background: none;
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+	transition: border-color 0.3s;
+}
+
+.tab.active {
+	border-bottom: 3px solid #3b82f6;
+}
+
+/* Abas: Músicas e Imagens */
+/*  ABA MUSICAS  */
+.aba {
+	display: none;
+}
+
+.aba.active {
+	display: block;
+}
+
+/* Esse bloco nao estava no novo codigo, vamos ver se precisa tirar mesmo depois que terminar */
+.admin-container {
+	max-width: 900px;
+	margin: 0 auto;
+	background: rgba(0,0,0,0.5);
+	padding: 2rem;
+	border-radius: 12px;
+	box-shadow: 0 0 12px rgbe(0,0,0,0.4);
+}
+
+/* Upload Section */
+.upload-box h2,
+.list-box h2 {
+	margin-bottom: 1rem;
+}
+
+.drop-area {
+	border: 2px dashed #888;
+	padding: 2rem;
+	text-align: center;
+	border-radius: 8px;
+	background-color: rgba(255, 255, 255, 0.05);
+	margin-bottom: 1rem;
+}
+
+.drop-area.dragover {
+	border-color: #3b82f6;
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+.upload-button {
+	width: 100%;
+	padding: 12px;
+	background-color: #3b82f6;
+	border: none;
+	border-radius: 6px;
+	font-weight: bold;
+	color: white;
+	cursor: pointer;
+}
+
+.upload-button:hover {
+	background-color: #2563EB;
+}
+
+.progress-container {
+	width: 100%;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-radius: 8px;
+	margin-top: 1rem;
+	height: 14px;
+	overflow: hidden;
+}
+
+.progress-bar {
+	width: 0%;
+	height: 100%;
+	background-color: #3b82f6;
+	transition: width 0.3s ease;
+}
+
+/* List Section */
+.list-box {
+	margin-top: 60px;
+}
+
+.list-actions,
+.list-summary {
+	display: flex;
+	justify-content: space-between;
+	margin: 1rem 0;
+	font-size: 0.95rem;
+}
+
+.music-table {
+	width: 100%;
+	border-collapse: colapse;
+	background-color: rgba(255, 255, 255, 0.05);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.music-table th,
+.music-table td {
+	padding: 12px;
+	text-align: left;
+}
+
+#c4 {
+	/* display: none; */
+	text-align: center;
+	/* color: yellow; */
+}
+
+.music-table thead {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.delete-btn {
+	background-color: #ef4444;
+	border: none;
+	padding: 8px 12px;
+	color: white;
+	font-weight: bold;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.delete-btn:hover {
+	background-color: #dc2626;
+}
+
+.delete-selected {
+	background-color: #ef4444;
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.delete-selected:hover {
+	background-color: #dc2626;
+}
+
+/* Placeholder da aba de imagens */
+.placeholder {
+	text-align: center;
+	padding: 3rem;
+	font-size: 1.2rem;
+	opacity: 0.6;
+}
+
+
+
+
+/* ====== ABA IMAGENS ====== */
+
+.gallery-box {
+	margin-top: 2rem;
+}
+
+.image-gallery {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	justify-content: center;
+}
+
+.image-card {
+	background-color: rgba(255, 255, 255, 0.05);
+	border-radius: 8px;
+	padding: 10px;
+	text-align: center;
+}
+
+.image-card.active {
+	border-color: #3b82f6;
+	box-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
+}
+
+.image-card img {
+	width: 300px;
+	border-radius: 4px;
+	margin-bottom: 0.5rem;
+}
+
+/* .set-bg-btn {		ANTERIOR A AULA M05-A06-E03
+	position: absolute;
+	bottom: 8px;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #3b82f6;
+	color: white;
+	border: none;
+	padding: 6px, 12px;
+	font-size: 0.85rem;
+	border-radius: 6px;
+	cursor: pointer;
+} */
+
+.set-bg-btn {
+	background-color: #3b82f6;
+	border: none;
+	padding: 8px 12px;
+	border-radius: 6px;
+	color: white;
+	cursor: pointer;
+}
+
+.set-bg-btn:hover {
+	background-color: #2563eb;
+}
+
+.upload-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	background-color: rgba(255, 255, 255, 0.05);
+	padding: 1.5rem;
+	border-radius: 8px;
+}
+
+.upload-form input[type="file"] {
+	background-color: #222;
+	color: white;
+	padding: 10px;
+	border-radius: 6px;
+	border: none;
+}
+
+.processing-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.8);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	font-size: 1.2rem;
+	z-index: 9999;
+}
+
+.processing-overlay .spinner {
+	width: 40px;
+	height: 40px;
+	border: 5px solid #ccc;
+	border-top-color: #3b82f6;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin-bottom: 1rem;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.info-modal {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 999;
+	pointer-events: none;
+}
+
+.info-content {
+	width: 360px;
+	max-width: 90vw;
+	padding: 20px;
+	background-color: rgba(255, 255, 255, 0.92); /* fundo branco gelo */
+	color: #1a1a1a;
+	border-radius: 20px;
+	text-align: center;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	font-family: 'Inter', sans-serif;
+	pointer-events: all;
+}
+
+.info-descricao {
+	font-size: 14px;
+	color: #444; /* texto descritivo mais escuro */
+	text-align: center;
+	margin-bottom: 20px;
+	line-height: 1.6;
+	padding: 0 20px;
+}
+
+.track-info {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.track-info h2 {
+	font-size: 20px;
+	color: #222; /* nome do artista em preto */
+	margin-bottom: 5px;
+	font-weight: 600;
+}
+
+.track-info p {
+	font-size: 16px;
+	color: #555; /* nome da música um tom abaixo do preto */
+	font-weight: 500;
+	margin: 0;
+}
+
+body, html {
+	height: 100%;
+	width: 100%;
+	font-family: 'Inter', sans-serif !important;
+}
+
+/* body {
+	background: url('../img/background.jpg') no-repeat center center fixed;
+	background-size: cover;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	font-family: 'Inter', sans-serif !important;
+} */
+
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	height: 100%;
+	padding: 2rem;
+}
+
+.logo {
+	max-width: 500px;
+	margin-top: 8rem;
+}
+
+.controls {
+	display: flex;
+	justify-content: center;
+	gap: 40px;
+	margin-bottom: 6rem;
+}
+
+.controls img {
+	width: 60px;
+	height: 60px;
+	cursor: pointer;
+}
