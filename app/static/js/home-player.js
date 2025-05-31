@@ -38,9 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		if (nomeSemPrefixo.includes("-")) {
 			const partes = nomeSemPrefixo.split("-");
-			artista = partes[0].trim();
+			artista = partes[0].replace(/_/g, " ").trim();
 			titulo = partes.slice(1).join("-").replace(/_/g, " ").trim();
 		}
+
 
 		// 🎵 Atualiza na tela
 		document.getElementById("musica-nome").innerHTML = `${artista}<br>"${titulo}"`;
@@ -85,11 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 		if (nomeSemPrefixo.includes("-")) {
 			const partes = nomeSemPrefixo.split("-");
-			artista = partes[0].trim();
+			artista = partes[0].replace(/_/g, " ").trim();
 			titulo = partes.slice(1).join("-").replace(/_/g, " ").trim();
 		} else {
 			titulo = nomeSemPrefixo.replace(/_/g, " ").trim();
 		}
+
 	
 		document.getElementById("info-artista").textContent = artista;
 		document.getElementById("info-titulo").textContent = `"${titulo}"`;
