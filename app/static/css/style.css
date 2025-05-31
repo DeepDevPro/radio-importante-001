@@ -117,3 +117,88 @@ body, html {
   font-weight: 500;
   margin: 0;
 }
+
+
+/* PAGINA ADMIN LOGIN */
+/* Camada escurecedora da página de login */
+.body-adm-login::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* escurecimento leve */
+  backdrop-filter: blur(5px); /* blur aplicado sobre a imagem */
+  z-index: 0;
+}
+
+/* Login box no centro da tela */
+.body-adm-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  font-family: 'Inter', sans-serif;
+}
+
+.login-box {
+  background-color: rgba(255, 255, 255, 0.92);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+}
+
+.login-box h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.login-box label {
+  display: block;
+  text-align: left;
+  margin-top: 15px;
+  font-weight: 500;
+  color: #333;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: #000;
+}
+
+.login-box button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #271F30;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-box button:hover {
+  background-color: #444;
+}
+
+.erro {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
