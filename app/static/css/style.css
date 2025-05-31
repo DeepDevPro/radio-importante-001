@@ -60,6 +60,14 @@ body, html {
 	font-family: 'Inter', sans-serif;
 }
 
+#musica-atual {
+	font-family: 'Inter', sans-serif;
+}
+
+#musica-nome {
+	font-family: 'Inter', sans-serif;
+}
+
 .controls {
 	display: flex;
 	justify-content: center;
