@@ -120,7 +120,7 @@ body, html {
 
 
 /* PAGINA ADMIN LOGIN */
-/* Camada escurecedora da página de login */
+/* Aplica o fundo escurecido com blur atrás do conteúdo */
 .body-adm-login::before {
   content: "";
   position: fixed;
@@ -128,9 +128,19 @@ body, html {
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* escurecimento leve */
-  backdrop-filter: blur(5px); /* blur aplicado sobre a imagem */
+  background: rgba(0, 0, 0, 0.5); /* camada escura */
   z-index: 0;
+}
+
+.body-adm-login::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(5px); /* blur separado */
+  z-index: 1;
 }
 
 /* Login box no centro da tela */
@@ -140,11 +150,14 @@ body, html {
   align-items: center;
   height: 100%;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   font-family: 'Inter', sans-serif;
 }
 
+/* Caixa de login nítida acima do blur */
 .login-box {
+  position: relative;
+  z-index: 3;
   background-color: rgba(255, 255, 255, 0.92);
   padding: 40px;
   border-radius: 20px;
@@ -154,6 +167,7 @@ body, html {
   text-align: center;
 }
 
+/* Mantém os estilos */
 .login-box h2 {
   font-size: 20px;
   margin-bottom: 20px;
@@ -202,3 +216,4 @@ body, html {
   font-weight: bold;
   margin-top: 10px;
 }
+
