@@ -99,9 +99,34 @@ document.addEventListener("DOMContentLoaded", () => {
 		// 🔁 Aqui restauramos os listeners de fechar
 		modal.style.display = "flex";
 	});
-	
-	modal.addEventListener("click", () => {
+
+	modal.addEventListener("click", (event) => {
+		// Fecha o modal ao clicar em qualquer lugar, inclusive no conteúdo
 		modal.style.display = "none";
+	});
+
+	infoBtn.addEventListener("click", (event) => {
+		event.stopPropagation(); // Impede que o clique no botão feche imediatamente o modal
+		const atual = playlist[currentIndex];
+		const nomeArquivo = decodeURIComponent(atual.split("/").pop().replace(".mp3", ""));
+
+		const nomeSemPrefixo = nomeArquivo.includes("_") ? nomeArquivo.split("_").slice(1).join("_") : nomeArquivo;
+
+		let artista = "Artista Desconhecido";
+		let titulo = "Faixa sem título";
+
+		if (nomeSemPrefixo.includes("-")) {
+			const partes = nomeSemPrefixo.split("-");
+			artista = partes[0].replace(/_/g, " ").trim();
+			titulo = partes.slice(1).join("-").replace(/_/g, " ").trim();
+		} else {
+			titulo = nomeSemPrefixo.replace(/_/g, " ").trim();
+		}
+
+		document.getElementById("info-artista").textContent = artista;
+		document.getElementById("info-titulo").textContent = `"${titulo}"`;
+
+		modal.style.display = "flex";
 	});
 	
 	document.addEventListener("keydown", (event) => {
