@@ -229,9 +229,9 @@ body, html {
 	min-height: 100vh;
 	margin: 0;
 	padding: 0;
-	display: flex;
+	/* display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: center; */
 }
 
 .body-admin-dash::before {
@@ -372,3 +372,24 @@ body, html {
 input[type="checkbox"] {
 	transform: scale(1.2);
 }
+
+.paginacao {
+	text-align: center;
+	margin-top: 20px;
+	font-family: 'Inter', sans-serif;
+}
+
+.paginacao a {
+	color: #ffffff;
+	background-color: #444;
+	padding: 8px 12px;
+	text-decoration: none;
+	margin: 0 5px;
+	border-radius: 6px;
+	transition: background-color 0.3s;
+}
+
+.paginacao a:hover {
+	background-color: #666;
+}
+

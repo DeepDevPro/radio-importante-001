@@ -100,7 +100,18 @@
 								{% endfor %}
 							</tbody>
 						</table>
-					</form> 
+					</form>
+
+					<div class="paginacao">
+						{% if page > 1 %}
+							<a href="?page={{ page - 1 }}&aba=musicas">&laquo; Página anterior</a>
+						{% endif %}
+						<span>Página {{ page }} de {{ total_paginas }}</span>
+						{% if page < total_paginas %}
+							<a href="?page={{ page + 1 }}&aba=musicas">Próxima página &raquo;</a>
+						{% endif %}
+					</div>
+
 				</section>
 			</div>
 	

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy # Importa a extensão para usar banco relacional
-import os, json, random, logging, boto3, uuid       # Para lidar com variáveis de ambiente
-from dotenv import load_dotenv          # Para carregar as variáveis do .env automaticamente
+import os, json, random, logging, boto3, uuid, math       # Para lidar com variáveis de ambiente
+from dotenv import load_dotenv          # Para carrxegar as variáveis do .env automaticamente
 from functools import wraps
 from werkzeug.utils import secure_filename
 from PIL import Image
@@ -291,20 +291,52 @@ def log_mem(tag=""):
 @login_required
 def admin_dashboard():
     aba = request.args.get("aba", "musicas")
-#    return render_template("admin-dashboard.html", aba=aba)
 
-    # Consulta tods as músicas salvas no banco
-    musicas = Track.query.all()
+    # Página atual (para paginação)
+    page = request.args.get("page", 1, type=int)
+    por_pagina = 100
 
-    # Calcula a duração total da playlist
-    total_segundos = sum(m.duracao_segundos or 0 for m in musicas)
-    total_formatado = str(timedelta(seconds=total_segundos))
+    # Total de músicas
+    total_musicas = Track.query.count()
+    total_paginas = math.ceil(total_musicas / por_pagina)
+
+    # Músicas da página atual
+    musicas = (
+        Track.query
+        .order_by(Track.id.desc())
+        .offset((page - 1) * por_pagina)
+        .limit(por_pagina)
+        .all()
+    )
+
+    # Duração total da playlist (todas as músicas, não só da página)
+    todas_as_musicas = Track.query.all()
+    total_segundos = sum(m.duracao_segundos or 0 for m in todas_as_musicas)
+    duracao_total = str(timedelta(seconds=total_segundos))
 
     return render_template("admin-dashboard.html",
-                           aba=aba,
-                           musicas=musicas,
-                           total_musicas=len(musicas),
-                           duracao_total=total_formatado)
+        aba=aba,
+        musicas=musicas,
+        total_musicas=total_musicas,
+        duracao_total=duracao_total,
+        page=page,
+        total_paginas=total_paginas
+    )
+
+    #  SE A ROTA DE CIMA FUNCIONAR APOS O COMMIT DAS PAGINAS COM ATE CEM MUSICAS POSSO APAGAR DAQUI PRA BAIXO PRA LIMPAR O ARQUIVO
+    # Consulta tods as músicas salvas no banco
+    # musicas = Track.query.all()
+
+    # Calcula a duração total da playlist
+    # total_segundos = sum(m.duracao_segundos or 0 for m in musicas)
+    # total_formatado = str(timedelta(seconds=total_segundos))
+
+    # return render_template("admin-dashboard.html",
+    #                        aba=aba,
+    #                        musicas=musicas,
+    #                        total_musicas=len(musicas),
+    #                        duracao_total=total_formatado)
+
 
 @app.route("/upload-musicas", methods=["POST"])
 def upload_musicas():
