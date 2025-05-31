@@ -217,3 +217,158 @@ body, html {
   margin-top: 10px;
 }
 
+
+
+/* PAGINA ADMIN DASHBOARD */
+.body-admin-dash {
+	background: url('../img/background.jpg') no-repeat center center fixed;
+	background-size: cover;
+	font-family: 'Inter', sans-serif;
+	color: #1F1F1F;
+	position: relative;
+	min-height: 100vh;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.body-admin-dash::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-color: rgba(0, 0, 0, 0.45);
+	backdrop-filter: blur(10px);
+	z-index: 0;
+}
+
+.box-admin-dash {
+	position: relative;
+	z-index: 1;
+	background: rgba(255, 255, 255, 0.92);
+	padding: 30px;
+	border-radius: 20px;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+	max-width: 90%;
+	width: 1000px;
+}
+
+.admin-dash-title {
+	font-size: 2rem;
+	font-weight: 700;
+	margin-bottom: 20px;
+	color: #271F30;
+	text-align: center;
+}
+
+.admin-dash-tabs {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.admin-dash-tabs .tab {
+	background: #fff;
+	color: #271F30;
+	border: 1px solid #ccc;
+	padding: 10px 20px;
+	margin: 0 5px;
+	border-radius: 5px;
+	cursor: pointer;
+	font-weight: 500;
+	transition: 0.3s;
+}
+
+.admin-dash-tabs .tab.active {
+	background: #631A86;
+	color: white;
+	border: none;
+}
+
+.admin-dash-container h2 {
+	margin-top: 10px;
+	font-size: 1.4rem;
+	color: #271F30;
+}
+
+.upload-box,
+.list-box {
+	margin-bottom: 30px;
+}
+
+.upload-form {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.upload-form input[type="file"] {
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+.upload-button {
+	background: #631A86;
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.upload-button:hover {
+	background: #4c1164;
+}
+
+.music-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 15px;
+	font-size: 0.95rem;
+}
+
+.music-table thead {
+	background: #5C7457;
+	color: white;
+}
+
+.music-table th,
+.music-table td {
+	padding: 10px;
+	text-align: left;
+	border-bottom: 1px solid #ccc;
+}
+
+.music-table tr:hover {
+	background-color: #f5f5f5;
+}
+
+.delete-btn,
+.delete-selected {
+	background: #F97068;
+	color: white;
+	padding: 6px 12px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: 0.3s;
+	font-size: 0.9rem;
+}
+
+.delete-btn:hover,
+.delete-selected:hover {
+	background: #d55652;
+}
+
+.list-actions {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 10px 0;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.2);
+}
