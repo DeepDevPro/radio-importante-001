@@ -15,17 +15,19 @@
 		<audio id="player" preload="auto"></audio>
 		
 		<div class="container">
-			<img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo">
+			<img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo-home">
 
-			<div id="musica-atual" class="musica-atual">
-				<div id="musica-nome" class="musica-nome">"Nome da Música"</div>
+			<div id="musica-atual" class="musica-atual-home">
+				<div id="musica-nome" class="musica-nome-home">"Nome da Música"</div>
 			</div>
 
-			<div class="controls">
+			<div class="controls-home">
 				<img id="play-btn" src="{{ url_for('static', filename='icons/play.svg') }}" alt="Play">
 				<img id="next-btn" src="{{ url_for('static', filename='icons/next-track.svg') }}" alt="Next">
 				<img id="info-btn" src="{{ url_for('static', filename='icons/info.svg') }}" alt="Info">
 			</div>
+
+			<img src="{{ url_for('static', filename='img/fundo-peixes.jpg') }}" alt="Fundo Peixes" class="img-peixes">
 		</div>
 
 		<script src="{{ url_for('static', filename='js/home-player.js') }}"></script>

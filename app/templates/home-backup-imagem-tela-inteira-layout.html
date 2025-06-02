@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>Rádio Importante</title>
+		
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+	</head>
+
+	<body class="body-home-radio">
+
+		<audio id="player" preload="auto"></audio>
+		
+		<div class="container">
+			<img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo">
+
+			<div id="musica-atual" class="musica-atual">
+				<div id="musica-nome" class="musica-nome">"Nome da Música"</div>
+			</div>
+
+			<div class="controls">
+				<img id="play-btn" src="{{ url_for('static', filename='icons/play.svg') }}" alt="Play">
+				<img id="next-btn" src="{{ url_for('static', filename='icons/next-track.svg') }}" alt="Next">
+				<img id="info-btn" src="{{ url_for('static', filename='icons/info.svg') }}" alt="Info">
+			</div>
+		</div>
+
+		<script src="{{ url_for('static', filename='js/home-player.js') }}"></script>
+		
+		<div class="info-modal" id="info-modal" style="display: none;">
+			<div class="info-content">
+				<p class="info-descricao">
+					Você está ouvindo a Rádio Importante. Todas músicas aqui são extraídas direto de vinis de época.
+					Nosso objetivo é levar o mundo dos discos pra você. Uma curadoria com total liberdade de gêneros e época,
+					a única regra é que seja provinda de um disco de vinyl.
+				</p>
+				<div class="track-info">
+					<h2 id="info-artista">Artista</h2>
+					<p id="info-titulo">"Título da Música"</p>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			window.playlist = {{ playlist | tojson }};
+			console.log("🎶 Playlist gerada (S3):", window.playlist);
+		</script>
+
+	</body>
+</html>
+
