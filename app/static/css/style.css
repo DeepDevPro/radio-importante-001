@@ -40,7 +40,7 @@ body, html {
 
 .musica-nome-home {
 	font-family: "Helvetica", "Arial", sans-serif;
-	font-size: clamp(1rem, 2vw, 1.5rem); /* Responsivo */
+	font-size: clamp(0.5rem, 1vw, 0.75rem); /* Responsivo */
 	font-weight: 500;
 	color: #1a1a1a;
 	letter-spacing: 0.3px;
@@ -65,7 +65,7 @@ body, html {
 	width: 100%;
 	max-width: 420px;
 	height: auto;
-	aspect-ratio: 3 / 2.4; /* Força a altura aumentar cerca de 20% */
+	aspect-ratio: 3 / 4; /* Força a altura aumentar cerca de 20% */
 	border-radius: 2px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 	object-fit: cover;
