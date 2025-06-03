@@ -31,33 +31,22 @@ body, html {
 
 .logo-home {
 	width: 260px;
-	margin-bottom: 20px;
+	margin-bottom: 40px;
 }
 
 .musica-atual-home {
-	margin-bottom: 30px;
+	margin-bottom: 50px;
 }
-
-/* .musica-atual .tocando {
-  font-size: 1rem;
-  font-weight: bold;
-} */
 
 .musica-nome-home {
-	font-size: 1rem;
-	font-style: italic;
-	color: #555;
+	font-family: "Helvetica", "Arial", sans-serif;
+	font-size: clamp(1rem, 2vw, 1.5rem); /* Responsivo */
+	font-weight: 500;
+	color: #1a1a1a;
+	letter-spacing: 0.3px;
+	text-align: center;
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6); /* leve brilho p/ fundo claro */
 }
-
-/* .musica-artista {
-  font-size: 1.4rem;
-  font-weight: 600;
-}
-
-.musica-nome {
-  font-size: 1.4rem;
-  font-style: italic;
-} */
 
 .controls-home {
 	display: flex;
@@ -75,8 +64,11 @@ body, html {
 .img-peixes {
 	width: 100%;
 	max-width: 420px;
-	border-radius: 8px;
+	height: auto;
+	aspect-ratio: 3 / 2.4; /* Força a altura aumentar cerca de 20% */
+	border-radius: 2px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	object-fit: cover;
 }
 
 .info-modal {
