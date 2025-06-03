@@ -92,7 +92,6 @@ body, html {
 
 .info-content {
 	width: 100%;
-	height: 100%; /* agora cobre a imagem inteira */
 	border-radius: 2px; /* igual ao .img-peixes */
 	padding: 20px;
 	background-color: rgba(255, 255, 255, 0.92);
