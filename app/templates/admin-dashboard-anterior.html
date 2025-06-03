@@ -60,40 +60,54 @@
 
 					<!-- Formulário de exclusão em massa -->
 					<form id="form-excluir-musicas" action="/excluir-musicas" method="POST">
+
+						<div class="list-actions">
+							<!-- <span>{{ total_musicas }} músicas</span> -->
+							<span id="contador-selecionadas">Nenhuma música selecionada</span>
+							<button type="submit" class="delete-selected">Excluir Selecionados</button>
+						</div>
+
+						<div class="list-summary">
+							<span>🎵 Total de músicas: {{ total_musicas }}</span>
+							<span>⏱️ Duração total: {{ duracao_total }}</span>
+						</div>
+
 						<table class="music-table">
 							<thead>
-							<tr>
-								<th><input type="checkbox" id="check-todas" /></th>
-								<th>Nome</th>
-								<th>Artista</th>
-								<th>Álbum</th>
-								<th>Ações</th>
-							</tr>
+								<tr>
+									<th><input type="checkbox" id="check-todos"/></th>
+									<th>#</th>
+									<th>Artista</th>
+									<th>Música</th>
+									<th>Versão</th>
+									<th>Duração</th>
+									<th id="c4">Ações</th>
+								</tr>
 							</thead>
 							<tbody>
-							{% for musica in musicas %}
-							<tr>
-								<td><input type="checkbox" name="ids" value="{{ musica.id }}" class="check-musica" /></td>
-								<td>{{ musica.titulo }}</td>
-								<td>{{ musica.artista }}</td>
-								<td>{{ musica.album }}</td>
-								<td id="c4">
-								<!-- EXCLUSÃO INDIVIDUAL FORA DO FORM PRINCIPAL -->
-								<form action="/excluir-musicas" method="POST" onsubmit="return confirm('Deseja excluir esta música?')">
-									<input type="hidden" name="ids" value="{{ musica.id }}">
-									<button class="delete-btn" type="submit">Excluir</button>
-								</form>
-								</td>
-							</tr>
-							{% endfor %}
+								{% for musica in musicas %}
+								<tr>
+									<td><input type="checkbox" name="ids" value="{{ musica.id }}" class="check-musica"/></td>
+									<td>{{ (page - 1) * 100 + loop.index }}</td>
+									<td>{{ musica.artista.replace("_", " ") }}</td>
+									<td>{{ musica.titulo.replace("_", " ") }}</td>
+									<!-- <td>{{ musica.versao or "-" }}</td> -->
+									<td>{{ musica.versao.replace("_", " ") if musica.versao else "-" }}</td>
+									<td>
+										{% set dur = musica.duracao_segundos %}
+										{{ "%02d:%02d:%02d" | format(dur // 3600, (dur % 3600) // 60, dur % 60) }}
+									</td>
+									<td id="c4">
+										<form action="/excluir-musicas" method="POST" onsubmit="return confirm('Deseja excluir esta músca?')">
+											<input type="hidden" name="ids" value="{{ musica.id }}">
+											<button class="delete-btn" type="submit">Excluir</button>
+										</form>
+									</td>
+								</tr>
+								{% endfor %}
 							</tbody>
 						</table>
-
-						<div class="botoes-admin">
-							<button type="submit" onclick="return confirm('Deseja excluir as músicas selecionadas?')">Excluir Selecionados</button>
-						</div>
 					</form>
-
 
 					<div class="paginacao">
 						{% if page > 1 %}
