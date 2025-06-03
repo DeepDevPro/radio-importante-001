@@ -92,6 +92,8 @@ body, html {
 
 .info-content {
 	width: 100%;
+	height: auto;
+	aspect-ratio: 3 / 3.3; /* Força a altura aumentar cerca de 20% */
 	border-radius: 2px; /* igual ao .img-peixes */
 	padding: 20px;
 	background-color: rgba(255, 255, 255, 0.92);
