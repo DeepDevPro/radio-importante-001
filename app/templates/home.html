@@ -18,7 +18,6 @@
 			<img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo-home">
 
 			<div id="musica-atual" class="musica-atual-home">
-				<!-- <div id="musica-nome" class="musica-nome-home">"Nome da Música"</div> -->
 				<div id="musica-nome" class="musica-nome-home">Artista - "Nome da Música"</div>
 
 			</div>
@@ -29,12 +28,30 @@
 				<img id="info-btn" src="{{ url_for('static', filename='icons/info.svg') }}" alt="Info">
 			</div>
 
-			<img src="{{ url_for('static', filename='img/fundo-peixes.jpg') }}" alt="Fundo Peixes" class="img-peixes">
+			<div class="peixes-container">
+				<img src="{{ url_for('static', filename='img/fundo-peixes.jpg') }}" alt="Fundo Peixes" class="img-peixes">
+
+				<div class="info-modal" id="info-modal" style="display: none;">
+					<div class="info-content">
+						<p class="info-descricao">
+							Você está ouvindo a Rádio Importante. Todas músicas aqui são extraídas direto de vinis de época.
+							Nosso objetivo é levar o mundo dos discos pra você. Uma curadoria com total liberdade de gêneros e época,
+							a única regra é que seja provinda de um disco de vinyl.
+						</p>
+						<div class="track-info">
+							<h2 id="info-artista">Artista</h2>
+							<p id="info-titulo">"Título da Música"</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- <img src="{{ url_for('static', filename='img/fundo-peixes.jpg') }}" alt="Fundo Peixes" class="img-peixes"> -->
 		</div>
 
 		<script src="{{ url_for('static', filename='js/home-player.js') }}"></script>
 		
-		<div class="info-modal" id="info-modal" style="display: none;">
+		<!-- <div class="info-modal" id="info-modal" style="display: none;">
 			<div class="info-content">
 				<p class="info-descricao">
 					Você está ouvindo a Rádio Importante. Todas músicas aqui são extraídas direto de vinis de época.
@@ -46,7 +63,7 @@
 					<p id="info-titulo">"Título da Música"</p>
 				</div>
 			</div>
-		</div>
+		</div> -->
 
 		<script>
 			window.playlist = {{ playlist | tojson }};
