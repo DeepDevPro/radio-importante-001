@@ -51,13 +51,13 @@ body, html {
 .controls-home {
 	display: flex;
 	justify-content: center;
-	gap: 30px;
+	gap: 25px;
 	margin-bottom: 30px;
 }
 
 .controls-home img {
-	width: 36px;
-	height: 36px;
+	width: 32px;
+	height: 32px;
 	cursor: pointer;
 }
 
