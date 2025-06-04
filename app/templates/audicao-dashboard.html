@@ -19,9 +19,13 @@
         <option value="all">Todos os tempos</option>
     </select>
 
+    <p id="total-minutos" style="font-size: 1.2em; font-weight: bold; margin-top: 10px;">
+    Total ouvido: carregando...
+    </p>
+
     <canvas id="grafico" width="600" height="300"></canvas>
 
-    <script>
+    <!-- <script>
         const ctx = document.getElementById("grafico").getContext("2d");
         const grafico = new Chart(ctx, {
             type: "line",
@@ -51,6 +55,61 @@
         }
 
         carregarDados();
+    </script> -->
+
+
+    <script>
+    async function carregarDados(periodo = "7d") {
+    const res = await fetch(`/api/audicao?periodo=${periodo}`);
+    const json = await res.json();
+
+    const dados = json.dados || [];
+    const total = json.total_minutos || 0;
+
+    // Atualiza o total no topo
+    const elTotal = document.getElementById("total-minutos");
+    const horas = Math.floor(total / 60);
+    const minutos = total % 60;
+    elTotal.innerText = `Total ouvido: ${horas}h ${minutos}min`;
+
+    const labels = dados.map(d => d.data);
+    const valores = dados.map(d => d.total);
+
+    const data = {
+        labels: labels,
+        datasets: [{
+        label: 'Minutos ouvidos por dia',
+        data: valores,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.3
+        }]
+    };
+
+    grafico.data = data;
+    grafico.update();
+    }
+
+    const ctx = document.getElementById('grafico').getContext('2d');
+    const grafico = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: []
+    },
+    options: {
+        responsive: true,
+        plugins: {
+        legend: { position: 'top' },
+        title: { display: true, text: 'Audição por dia' }
+        }
+    }
+    });
+
+    document.getElementById("periodo").addEventListener("change", (e) => {
+    carregarDados(e.target.value);
+    });
+
+    carregarDados(); // inicial
     </script>
 </body>
 </html>
