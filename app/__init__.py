@@ -5,10 +5,11 @@ from dotenv import load_dotenv          # Para carrxegar as variáveis do .env a
 from functools import wraps
 from werkzeug.utils import secure_filename
 from PIL import Image
-from app.models import User, db, Track
+from app.models import User, db, Track, Audicao
 from datetime import timedelta
 from app.s3_client import upload_arquivo_s3, deletar_arquivo_s3
 from flask_session import Session
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -441,3 +442,10 @@ def reset_session():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+@app.route("/testar-audicao")
+def testar_audicao():
+    nova = Audicao(duracao=60)
+    db.session.add(nova)
+    db.session.commit()
+    return jsonify({"status": "ok", "id": nova.id})
