@@ -6,9 +6,10 @@ from functools import wraps
 from werkzeug.utils import secure_filename
 from PIL import Image
 from app.models import User, db, Track, Audicao
-from datetime import timedelta
+from datetime import timedelta, datetime
 from app.s3_client import upload_arquivo_s3, deletar_arquivo_s3
 from flask_session import Session
+from sqlalchemy import func
 
 
 logging.basicConfig(level=logging.INFO)
@@ -456,3 +457,39 @@ def registrar_ping():
     db.session.add(nova)
     db.session.commit()
     return jsonify({"status": "ok"}), 200
+
+@app.route("/api/audicao")
+def api_audicao():
+    periodos = {
+        "24h": timedelta(hours=24),
+        "3d": timedelta(days=3),
+        "7d": timedelta(days=7),
+        "30d": timedelta(days=30),
+        "90d": timedelta(days=90),
+        "180d": timedelta(days=180),
+        "1y": timedelta(days=365),
+        "all": None
+    }
+
+    periodo = request.args.get("periodo", "7d")
+    agora = datetime.utcnow()
+
+    if periodo not in periodos:
+        return jsonify({"erro": "Período inválido"}), 400
+
+    query = db.session.query(
+        func.date(Audicao.timestamp).label("data"),
+        func.sum(Audicao.duracao).label("total")
+    )
+
+    if periodos[periodo]:
+        data_inicio = agora - periodos[periodo]
+        query = query.filter(Audicao.timestamp >= data_inicio)
+
+    resultados = query.group_by("data").order_by("data").all()
+
+    return jsonify([
+        {"data": r.data.isoformat(), "total": r.total}
+        for r in resultados
+    ])
+
