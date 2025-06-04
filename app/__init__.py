@@ -320,7 +320,9 @@ def admin_dashboard():
     # Duração total da playlist (todas as músicas, não só da página)
     todas_as_musicas = Track.query.all()
     total_segundos = sum(m.duracao_segundos or 0 for m in todas_as_musicas)
-    duracao_total_min = round(total_segundos / 60)  # 🔁 ALTERADA: mostra total em minutos
+    horas = total_segundos // 3600
+    minutos = (total_segundos % 3600) // 60
+    duracao_total = f"{horas}h {minutos}min"
 
     # Duração total da playlist (todas as músicas, não só da página)
     # todas_as_musicas = Track.query.all()
@@ -331,7 +333,7 @@ def admin_dashboard():
         aba=aba,
         musicas=musicas,
         total_musicas=total_musicas,
-        duracao_total=duracao_total_min,  # ✅ agora passa a variável certa
+        duracao_total=duracao_total,
         page=page,
         total_paginas=total_paginas
     )
