@@ -44,7 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 		// 🎵 Atualiza na tela
-		document.getElementById("musica-nome").textContent = `${artista} - "${titulo}"`;
+		document.getElementById("musica-nome").textContent = `${artista} "${titulo}"`;
+		// document.getElementById("musica-nome").textContent = `${artista} - "${titulo}"`;
 
 
 	}
