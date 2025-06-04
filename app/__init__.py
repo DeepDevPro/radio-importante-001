@@ -449,3 +449,10 @@ def testar_audicao():
     db.session.add(nova)
     db.session.commit()
     return jsonify({"status": "ok", "id": nova.id})
+
+@app.route("/ping", methods=["POST"])
+def registrar_ping():
+    nova = Audicao(duracao=60)
+    db.session.add(nova)
+    db.session.commit()
+    return jsonify({"status": "ok"}), 200
