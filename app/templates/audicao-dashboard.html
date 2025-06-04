@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tempo de Audição</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>Tempo de Audição por Dia</h2>
+    
+    <label for="periodo">Escolha o período:</label>
+    <select id="periodo" onchange="carregarDados()">
+        <option value="24h">Últimas 24h</option>
+        <option value="3d">Últimos 3 dias</option>
+        <option value="7d" selected>Últimos 7 dias</option>
+        <option value="30d">Últimos 30 dias</option>
+        <option value="90d">Últimos 90 dias</option>
+        <option value="180d">Últimos 180 dias</option>
+        <option value="1y">Último ano</option>
+        <option value="all">Todos os tempos</option>
+    </select>
+
+    <canvas id="grafico" width="600" height="300"></canvas>
+
+    <script>
+        const ctx = document.getElementById("grafico").getContext("2d");
+        const grafico = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: [],
+                datasets: [{
+                    label: "Minutos ouvidos por dia",
+                    data: [],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        async function carregarDados() {
+            const periodo = document.getElementById("periodo").value;
+            const resposta = await fetch(`/api/audicao?periodo=${periodo}`);
+            const dados = await resposta.json();
+
+            grafico.data.labels = dados.map(item => item.data);
+            grafico.data.datasets[0].data = dados.map(item => item.total);
+            grafico.update();
+        }
+
+        carregarDados();
+    </script>
+</body>
+</html>
+
