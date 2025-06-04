@@ -304,19 +304,28 @@ def admin_dashboard():
     total_musicas = Track.query.count()
     total_paginas = math.ceil(total_musicas / por_pagina)
 
+    # Músicas da página atual (usando paginate para habilitar loop.index no Jinja2)
+    paginacao = Track.query.order_by(Track.id.desc()).paginate(page=page, per_page=por_pagina)  # 🔁 ALTERADA
+    musicas = paginacao.items  # 🔁 NOVA
+
     # Músicas da página atual
-    musicas = (
-        Track.query
-        .order_by(Track.id.desc())
-        .offset((page - 1) * por_pagina)
-        .limit(por_pagina)
-        .all()
-    )
+    # musicas = (
+    #     Track.query
+    #     .order_by(Track.id.desc())
+    #     .offset((page - 1) * por_pagina)
+    #     .limit(por_pagina)
+    #     .all()
+    # )
 
     # Duração total da playlist (todas as músicas, não só da página)
     todas_as_musicas = Track.query.all()
     total_segundos = sum(m.duracao_segundos or 0 for m in todas_as_musicas)
-    duracao_total = str(timedelta(seconds=total_segundos))
+    duracao_total_min = round(total_segundos / 60)  # 🔁 ALTERADA: mostra total em minutos
+
+    # Duração total da playlist (todas as músicas, não só da página)
+    # todas_as_musicas = Track.query.all()
+    # total_segundos = sum(m.duracao_segundos or 0 for m in todas_as_musicas)
+    # duracao_total = str(timedelta(seconds=total_segundos))
 
     return render_template("admin-dashboard.html",
         aba=aba,
@@ -326,21 +335,6 @@ def admin_dashboard():
         page=page,
         total_paginas=total_paginas
     )
-
-    #  SE A ROTA DE CIMA FUNCIONAR APOS O COMMIT DAS PAGINAS COM ATE CEM MUSICAS POSSO APAGAR DAQUI PRA BAIXO PRA LIMPAR O ARQUIVO
-    # Consulta tods as músicas salvas no banco
-    # musicas = Track.query.all()
-
-    # Calcula a duração total da playlist
-    # total_segundos = sum(m.duracao_segundos or 0 for m in musicas)
-    # total_formatado = str(timedelta(seconds=total_segundos))
-
-    # return render_template("admin-dashboard.html",
-    #                        aba=aba,
-    #                        musicas=musicas,
-    #                        total_musicas=len(musicas),
-    #                        duracao_total=total_formatado)
-
 
 @app.route("/upload-musicas", methods=["POST"])
 def upload_musicas():

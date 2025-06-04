@@ -67,7 +67,6 @@
 									<th>#</th>
 									<th>Nome</th>
 									<th>Artista</th>
-									<th>Álbum</th>
 									<th>Ações</th>
 								</tr>
 							</thead>
@@ -79,15 +78,18 @@
 								<td>{{ (page - 1) * 50 + loop.index }}</td>  <!-- ✅ Número da música -->
 								<td>{{ musica.titulo }}</td>
 								<td>{{ musica.artista }}</td>
-								<td>{{ musica.album }}</td>
 								<td id="c4">
 									<button class="delete-btn" type="button" onclick="excluirMusica('{{ musica.id }}')">Excluir</button>
 								</td>
-								<td>{{ (page - 1) * 50 + loop.index }}</td>
 							</tr>
 							{% endfor %}
 							</tbody>
 						</table>
+
+						<div class="totais-musicas">
+							<p>Total de músicas: <strong>{{ total_musicas }}</strong></p>
+							<p>Duração total: <strong>{{ duracao_total_min }} min</strong></p>
+						</div>
 						
 						<button type="submit" class="btn-excluir-selecionados" onclick="return confirm('Deseja excluir as músicas selecionadas?')">
 							Excluir Selecionadas
