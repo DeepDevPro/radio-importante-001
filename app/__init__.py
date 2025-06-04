@@ -298,7 +298,7 @@ def admin_dashboard():
 
     # Página atual (para paginação)
     page = request.args.get("page", 1, type=int)
-    por_pagina = 100
+    por_pagina = 50
 
     # Total de músicas
     total_musicas = Track.query.count()

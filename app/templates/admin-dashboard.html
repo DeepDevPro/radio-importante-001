@@ -64,6 +64,7 @@
 							<thead>
 								<tr>
 									<th><input type="checkbox" id="check-todos" /></th>
+									<th>#</th>
 									<th>Nome</th>
 									<th>Artista</th>
 									<th>Álbum</th>
@@ -81,6 +82,7 @@
 								<td id="c4">
 									<button class="delete-btn" type="button" onclick="excluirMusica('{{ musica.id }}')">Excluir</button>
 								</td>
+								<td>{{ (page - 1) * 50 + loop.index }}</td>
 							</tr>
 							{% endfor %}
 							</tbody>

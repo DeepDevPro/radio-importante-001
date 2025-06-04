@@ -156,10 +156,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	const checkboxes = document.querySelectorAll(".check-musica");
 	const contadorSpan = document.getElementById("contador-selecionadas");
 
-	if (checkTodos && checkboxes.length > 0 && contadorSpan) {
+	if (checkTodos) {
 		checkTodos.addEventListener("change", () => {
 			const marcado = checkTodos.checked;
-			checkboxes.forEach(cb => cb.checked = marcado);
+			document.querySelectorAll(".check-musica").forEach(cb => cb.checked = marcado); // ⚠️ Atualizado para garantir que ele funcione com elementos gerados dinamicamente
 			atualizarContador();
 		});
 
@@ -176,5 +176,20 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 		}
 	}
+
+	// Validação ao tentar excluir sem nenhuma música marcada
+	const formExcluir = document.getElementById("form-excluir-musicas");
+
+	if (formExcluir) {
+		formExcluir.addEventListener("submit", function (e) {
+			const selecionados = document.querySelectorAll(".check-musica:checked");
+
+			if (selecionados.length === 0) {
+				e.preventDefault();
+				alert("Você precisa selecionar alguma música para poder excluir.");
+			}
+		});
+	}
+
 });
 
