@@ -58,6 +58,11 @@
 				<section class="list-box">
 					<h2>Músicas Disponíveis</h2>
 
+					<div class="totais-musicas">
+						<p>Total de músicas: <strong>{{ total_musicas }}</strong></p>
+						<p>⏱️ Duração total: <strong>{{ duracao_total }}</strong></p>
+					</div>
+
 					<!-- Formulário de exclusão em massa -->
 					<form id="form-excluir-musicas" action="/excluir-musicas" method="POST">
 						<table class="music-table">
@@ -86,10 +91,6 @@
 							</tbody>
 						</table>
 
-						<div class="totais-musicas">
-							<p>Total de músicas: <strong>{{ total_musicas }}</strong></p>
-							<p>Duração total: <strong>{{ duracao_total_min }} min</strong></p>
-						</div>
 						
 						<button type="submit" class="btn-excluir-selecionados" onclick="return confirm('Deseja excluir as músicas selecionadas?')">
 							Excluir Selecionadas
