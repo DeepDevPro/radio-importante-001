@@ -76,6 +76,7 @@
 							{% for musica in musicas %}
 							<tr>
 								<td><input type="checkbox" name="ids" value="{{ musica.id }}" class="check-musica" /></td>
+								<td>{{ (page - 1) * 50 + loop.index }}</td>  <!-- ✅ Número da música -->
 								<td>{{ musica.titulo }}</td>
 								<td>{{ musica.artista }}</td>
 								<td>{{ musica.album }}</td>
