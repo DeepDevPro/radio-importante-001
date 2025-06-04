@@ -23,6 +23,7 @@
 		<div class="admin-dash-tabs">
 			<button class="tab active" data-aba="musicas">Músicas</button>
 			<!-- <button class="tab" data-aba="imagens">Imagens</button> -->
+			 <!-- Comentei a tab acima pra ver se ela some da página, se sumir posso apagar de vez. -->
 		</div>
 	
 		<main class="admin-dash-container">
@@ -79,17 +80,24 @@
 								<td>{{ musica.artista }}</td>
 								<td>{{ musica.album }}</td>
 								<td id="c4">
-									<button class="delete-btn" type="button" onclick="excluirMusica('{{ musica.id }}')">Excluir</button>
+							
+									
 								</td>
 							</tr>
 							{% endfor %}
-							</tbody>
-						</table>
-						
-						<button type="submit" class="btn-excluir-selecionados" onclick="return confirm('Deseja excluir as músicas selecionadas?')">
-							Excluir Selecionadas
-						</button>
-					</form>
+						</tbody>
+					</table>
+					
+					<button type="submit" class="btn-excluir-selecionados" onclick="return confirm('Deseja excluir as músicas selecionadas?')">
+						Excluir Selecionadas
+					</button>
+				</form>
+				
+				<!-- EXCLUSÃO INDIVIDUAL FORA DO FORM PRINCIPAL -->
+				<form action="/excluir-musicas" method="POST" onsubmit="return confirm('Deseja excluir esta música?')">
+					<input type="hidden" name="ids" value="{{ musica.id }}">
+					<button class="delete-btn" type="submit">Excluir</button>
+				</form>
 
 					<div class="paginacao">
 						{% if page > 1 %}
@@ -103,33 +111,13 @@
 
 				</section>
 			</div>
-
+	
 		</main>
 	</div>
 
 	<script src="{{ url_for('static', filename='js/admin-dashboard.js') }}"></script>
-
-	<!-- Script para exclusão individual -->
-	<script>
-	function excluirMusica(id) {
-		if (confirm("Deseja excluir esta música?")) {
-			const form = document.createElement("form");
-			form.method = "POST";
-			form.action = "/excluir-musicas";
-
-			const input = document.createElement("input");
-			input.type = "hidden";
-			input.name = "ids";
-			input.value = id;
-
-			form.appendChild(input);
-			document.body.appendChild(form);
-			form.submit();
-		}
-	}
-	</script>
-
+	
 	<!-- DEBUG: imagem_fundo={{ imagem_fundo }}, outras={{ outras_variaveis }} -->
-
+	 
 </body>
 </html>
