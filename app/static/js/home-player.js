@@ -136,6 +136,25 @@ document.addEventListener("DOMContentLoaded", () => {
 			modal.style.display = "none";
 		}
 	});
+
+	function pingServidor() {
+		fetch("/ping", {
+			method: "POST"
+		}).then(response => {
+			if (!response.ok) {
+				console.error("Falha no ping do servidor");
+			}
+		}).catch(err => {
+			console.error("Erro no ping:", err);
+		});
+	}
+
+	// Inicia o ping a cada 60 segundos (60000 ms)
+	setInterval(pingServidor, 60000);
+
+	// E já manda o primeiro ping ao abrir
+	pingServidor();
+
 	
 });
 
