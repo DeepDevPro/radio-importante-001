@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # models.py
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -29,4 +30,9 @@ class Track(db.Model):
 	versao = db.Column(db.String(100), nullable=True)
 	duracao_segundos = db.Column(db.Integer)
 	nome_arquivo = db.Column(db.String(200))
+
+class Audicao(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    duracao = db.Column(db.Integer, default=60)
 
