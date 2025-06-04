@@ -331,7 +331,7 @@ def admin_dashboard():
         aba=aba,
         musicas=musicas,
         total_musicas=total_musicas,
-        duracao_total=duracao_total,
+        duracao_total=duracao_total_min,  # ✅ agora passa a variável certa
         page=page,
         total_paginas=total_paginas
     )
