@@ -493,10 +493,6 @@ def api_audicao():
         for r in resultados
     ])
 
-# @app.route("/audicao-dashboard")
-# def audicao_dashboard():    
-#     return render_template("audicao-dashboard.html")
-
 @app.route("/api/audicao")
 def api_audicao():
     periodos = {
