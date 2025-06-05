@@ -446,14 +446,14 @@ if __name__ == "__main__":
 
 @app.route("/testar-audicao")
 def testar_audicao():
-    nova = Audicao(duracao=60)
+    nova = Audicao(duracao=1)
     db.session.add(nova)
     db.session.commit()
     return jsonify({"status": "ok", "id": nova.id})
 
 @app.route("/ping", methods=["POST"])
 def registrar_ping():
-    nova = Audicao(duracao=60)
+    nova = Audicao(duracao=1)
     db.session.add(nova)
     db.session.commit()
     return jsonify({"status": "ok"}), 200
