@@ -25,38 +25,6 @@
 
     <canvas id="grafico" width="600" height="300"></canvas>
 
-    <!-- <script>
-        const ctx = document.getElementById("grafico").getContext("2d");
-        const grafico = new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: [],
-                datasets: [{
-                    label: "Minutos ouvidos por dia",
-                    data: [],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-
-        async function carregarDados() {
-            const periodo = document.getElementById("periodo").value;
-            const resposta = await fetch(`/api/audicao?periodo=${periodo}`);
-            const dados = await resposta.json();
-
-            grafico.data.labels = dados.map(item => item.data);
-            grafico.data.datasets[0].data = dados.map(item => item.total);
-            grafico.update();
-        }
-
-        carregarDados();
-    </script> -->
-
 
     <script>
     async function carregarDados(periodo = "7d") {
