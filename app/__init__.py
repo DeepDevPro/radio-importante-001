@@ -494,6 +494,11 @@ def api_audicao():
     dados = [{"data": r.data.isoformat(), "total": r.total} for r in resultados]
     total_minutos = sum(r.total for r in resultados)
 
+    print("🚨 Debug resultados:")
+    for r in resultados:
+        print(f"{r.data} → {r.total} minutos")
+
+
     return jsonify({
         "dados": dados,
         "total_minutos": total_minutos

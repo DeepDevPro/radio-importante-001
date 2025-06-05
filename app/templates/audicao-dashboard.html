@@ -3,10 +3,44 @@
 <head>
     <title>Tempo de Audição</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #f0f0f0;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+            margin: 0;
+            text-align: center;
+        }
+        h2 {
+            margin-top: 0;
+            color: #ffffff;
+        }
+        label, select, p {
+            margin: 10px;
+            font-size: 1.1em;
+        }
+        select {
+            background-color: #1e1e1e;
+            color: #f0f0f0;
+            border: 1px solid #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        #total-minutos {
+            font-weight: bold;
+            color: #00c2c2;
+        }
+        canvas {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h2>Tempo de Audição por Dia</h2>
-    
+
     <label for="periodo">Escolha o período:</label>
     <select id="periodo" onchange="carregarDados()">
         <option value="24h">Últimas 24h</option>
@@ -19,66 +53,66 @@
         <option value="all">Todos os tempos</option>
     </select>
 
-    <p id="total-minutos" style="font-size: 1.2em; font-weight: bold; margin-top: 10px;">
-    Total ouvido: carregando...
-    </p>
+    <p id="total-minutos">Total ouvido: carregando...</p>
 
-    <canvas id="grafico" width="600" height="300"></canvas>
-
+    <canvas id="grafico" width="600" height="200"></canvas>
 
     <script>
-    async function carregarDados(periodo = "7d") {
-    const res = await fetch(`/api/audicao?periodo=${periodo}`);
-    const json = await res.json();
+        async function carregarDados(periodo = "7d") {
+            const res = await fetch(`/api/audicao?periodo=${periodo}`);
+            const json = await res.json();
 
-    const dados = json.dados || [];
-    const total = json.total_minutos || 0;
+            const dados = json.dados || [];
+            const total = json.total_minutos || 0;
 
-    // Atualiza o total no topo
-    const elTotal = document.getElementById("total-minutos");
-    const horas = Math.floor(total / 60);
-    const minutos = total % 60;
-    elTotal.innerText = `Total ouvido: ${horas}h ${minutos}min`;
+            const elTotal = document.getElementById("total-minutos");
+            const horas = Math.floor(total / 60);
+            const minutos = total % 60;
+            elTotal.innerText = `Total ouvido: ${horas}h ${minutos}min`;
 
-    const labels = dados.map(d => d.data);
-    const valores = dados.map(d => d.total);
+            const labels = dados.map(d => d.data);
+            const valores = dados.map(d => d.total);
 
-    const data = {
-        labels: labels,
-        datasets: [{
-        label: 'Minutos ouvidos por dia',
-        data: valores,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.3
-        }]
-    };
+            const data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Minutos por dia',
+                    data: valores,
+                    borderColor: '#00c2c2',
+                    backgroundColor: 'rgba(0, 194, 194, 0.2)',
+                    tension: 0.3
+                }]
+            };
 
-    grafico.data = data;
-    grafico.update();
-    }
-
-    const ctx = document.getElementById('grafico').getContext('2d');
-    const grafico = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: [],
-        datasets: []
-    },
-    options: {
-        responsive: true,
-        plugins: {
-        legend: { position: 'top' },
-        title: { display: true, text: 'Audição por dia' }
+            grafico.data = data;
+            grafico.update();
         }
-    }
-    });
 
-    document.getElementById("periodo").addEventListener("change", (e) => {
-    carregarDados(e.target.value);
-    });
+        const ctx = document.getElementById('grafico').getContext('2d');
+        const grafico = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: []
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top', labels: { color: '#ddd' } },
+                    title: { display: false }
+                },
+                scales: {
+                    x: { ticks: { color: '#ccc' } },
+                    y: { ticks: { color: '#ccc' } }
+                }
+            }
+        });
 
-    carregarDados(); // inicial
+        document.getElementById("periodo").addEventListener("change", (e) => {
+            carregarDados(e.target.value);
+        });
+
+        carregarDados(); // inicial
     </script>
 </body>
 </html>
-
