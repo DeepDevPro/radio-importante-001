@@ -458,40 +458,9 @@ def registrar_ping():
     db.session.commit()
     return jsonify({"status": "ok"}), 200
 
-@app.route("/api/audicao")
-def api_audicao():
-    periodos = {
-        "24h": timedelta(hours=24),
-        "3d": timedelta(days=3),
-        "7d": timedelta(days=7),
-        "30d": timedelta(days=30),
-        "90d": timedelta(days=90),
-        "180d": timedelta(days=180),
-        "1y": timedelta(days=365),
-        "all": None
-    }
-
-    periodo = request.args.get("periodo", "7d")
-    agora = datetime.utcnow()
-
-    if periodo not in periodos:
-        return jsonify({"erro": "Período inválido"}), 400
-
-    query = db.session.query(
-        func.date(Audicao.timestamp).label("data"),
-        func.sum(Audicao.duracao).label("total")
-    )
-
-    if periodos[periodo]:
-        data_inicio = agora - periodos[periodo]
-        query = query.filter(Audicao.timestamp >= data_inicio)
-
-    resultados = query.group_by("data").order_by("data").all()
-
-    return jsonify([
-        {"data": r.data.isoformat(), "total": r.total}
-        for r in resultados
-    ])
+@app.route("/audicao-dashboard")
+def audicao_dashboard():    
+    return render_template("audicao-dashboard.html")
 
 @app.route("/api/audicao")
 def api_audicao():
