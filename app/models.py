@@ -34,5 +34,5 @@ class Track(db.Model):
 class Audicao(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    duracao = db.Column(db.Integer, default=60)
+    duracao = db.Column(db.Integer, default=1)  # ← corrigido aqui
 
