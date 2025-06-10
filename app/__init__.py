@@ -504,4 +504,25 @@ def api_audicao():
         "total_minutos": total_minutos
     })
 
+# Nova rota para tocar a playlist nos app mobile
+@app.route("/api/playlist")
+def api_playlist():
+    # Reutiliza a mesma lógica da rota home para pegar a fila da sessão
+    musicas = Track.query.order_by(Track.id).all()
+    nomes = [m.nome_arquivo for m in musicas]
 
+    if "fila" not in session or set(session["fila"]) != set(nomes):
+        logger.info("🛡️ Resetando session['fila'] para API de playlist")
+        shuffled = nomes.copy()
+        random.shuffle(shuffled)
+        session["fila"] = shuffled
+        session["indice_atual"] = 0
+    
+    fila_de_musicas = session["fila"]
+
+    playlist_urls = [
+        f"https://radioimportante-uploads.s3.us-west-2.amazonaws.com/static/musicas/otimizadas/{m}"
+        for m in fila_de_musicas
+    ]
+
+    return jsonify(playlist_urls)
