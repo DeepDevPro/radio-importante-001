@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy # Importa a extensão para usar banco relacional
+from flask_cors import CORS
 import os, json, random, logging, boto3, uuid, math       # Para lidar com variáveis de ambiente
 from dotenv import load_dotenv          # Para carrxegar as variáveis do .env automaticamente
 from functools import wraps
@@ -23,6 +24,15 @@ load_dotenv()
 
 # Inicializa a aplicação Flask
 app = Flask(__name__)
+# Lista de domínios que têm permissão para acessar a API
+origins = [
+    "https://importantestudio.com",
+    "https://www.importantestudio.com",
+    "https://app.flutterflow.io",
+    "https://radio-importante-app-xommik.flutterflow.app" # O domínio de teste do FlutterFlow
+]
+
+CORS(app, origins=origins)
 
 # Configurando a Secret Key da sessão
 app.secret_key = os.getenv("SECRET_KEY")
