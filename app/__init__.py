@@ -24,15 +24,7 @@ load_dotenv()
 
 # Inicializa a aplicação Flask
 app = Flask(__name__)
-# Lista de domínios que têm permissão para acessar a API
-origins = [
-    "https://importantestudio.com",
-    "https://www.importantestudio.com",
-    "https://app.flutterflow.io",
-    "https://radio-importante-app-xommik.flutterflow.app" # O domínio de teste do FlutterFlow
-]
-
-CORS(app, origins=origins)
+CORS(app)
 
 # Configurando a Secret Key da sessão
 app.secret_key = os.getenv("SECRET_KEY")
