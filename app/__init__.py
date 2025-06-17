@@ -360,7 +360,8 @@ def upload_musicas():
     try:
         # for arquivo in arquivos:
         for i, arquivo in enumerate(arquivos):
-            nome_seguro = secure_filename(arquivo.filename)
+            # nome_seguro = secure_filename(arquivo.filename)   # linha substituída, se a de baixo funcionar pode apagar essa
+            nome_seguro = arquivo.filename.replace('/', '_')
             nome_base = os.path.splitext(nome_seguro)[0]
     
             # ✅ Protege contra falta de hífen no nome do arquivo
