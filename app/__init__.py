@@ -85,6 +85,10 @@ def home():
         playlist=playlist
         )
 
+@app.route('/politica-privacidade.html')
+def privacy_policy():
+    return render_template('politica-privacidade.html')
+
 @app.route("/user-login")
 def login_page():
     return render_template("user-login.html")
@@ -529,3 +533,4 @@ def api_playlist():
     ]
 
     return jsonify(playlist_urls)
+
