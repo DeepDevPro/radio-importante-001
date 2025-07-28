@@ -1,47 +1,265 @@
-*{
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+/* Reset e configurações básicas */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-	margin: 0;
-	padding: 2rem;
-	min-height: 100vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #EFEAE3;
 }
+
+/* Container principal */
 .container {
-	background: white;
-	padding: 3rem;
-	border-radius: 15px;
-	box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-	text-align: center;
-	max-width: 500px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
-h1 {
-	color: #2c3e50;
-	margin-bottom: 1rem;
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #314444 0%, #0E1B1D 100%);
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-p {
-	color: #666;
-	margin-bottom: 2rem;
-	line-height: 1.6;
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
 }
-.btn {
-	display: inline-block;
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-	color: white;
-	text-decoration: none;
-	padding: 1rem 2rem;
-	border-radius: 8px;
-	font-weight: 600;
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+.subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-weight: 300;
 }
-.btn:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+
+/* Main content */
+main {
+    background: white;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* Introdução */
+.intro {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.last-updated {
+    background-color: #e3f2fd;
+    color: #1565c0;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+.intro p:last-child {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.7;
+}
+
+/* Seções da política */
+.policy-section {
+    margin-bottom: 2.5rem;
+}
+
+.policy-section h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid #667eea;
+    position: relative;
+}
+
+.policy-section h2::before {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #764ba2;
+}
+
+.policy-section h3 {
+    color: #34495e;
+    font-size: 1.2rem;
+    margin: 1.5rem 0 0.8rem 0;
+    font-weight: 600;
+}
+
+.policy-section p {
+    margin-bottom: 1rem;
+    color: #555;
+    line-height: 1.7;
+}
+
+.policy-section ul {
+    margin: 1rem 0 1rem 1.5rem;
+}
+
+.policy-section li {
+    margin-bottom: 0.5rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.policy-section li::marker {
+    color: #667eea;
+}
+
+/* Informações de contato */
+.contact-info {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    margin-top: 1rem;
+}
+
+.contact-info p {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.contact-info strong {
+    color: #2c3e50;
+}
+
+/* Footer */
+footer {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 1.5rem 0;
+    margin-top: 2rem;
+}
+
+footer p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    main {
+        margin: 1rem auto;
+        padding: 1.5rem;
+        border-radius: 5px;
+    }
+    
+    .policy-section h2 {
+        font-size: 1.3rem;
+    }
+    
+    .policy-section h3 {
+        font-size: 1.1rem;
+    }
+    
+    .policy-section ul {
+        margin-left: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 1.5rem 0;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    main {
+        margin: 0.5rem auto;
+        padding: 1rem;
+    }
+    
+    .policy-section {
+        margin-bottom: 2rem;
+    }
+    
+    .contact-info {
+        padding: 1rem;
+    }
+}
+
+/* Animações suaves */
+.policy-section {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.policy-section:nth-child(1) { animation-delay: 0.1s; }
+.policy-section:nth-child(2) { animation-delay: 0.2s; }
+.policy-section:nth-child(3) { animation-delay: 0.3s; }
+.policy-section:nth-child(4) { animation-delay: 0.4s; }
+.policy-section:nth-child(5) { animation-delay: 0.5s; }
+.policy-section:nth-child(6) { animation-delay: 0.6s; }
+.policy-section:nth-child(7) { animation-delay: 0.7s; }
+.policy-section:nth-child(8) { animation-delay: 0.8s; }
+.policy-section:nth-child(9) { animation-delay: 0.9s; }
+.policy-section:nth-child(10) { animation-delay: 1s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Efeitos de hover */
+.policy-section h2:hover {
+    color: #667eea;
+    transition: color 0.3s ease;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
 }
